@@ -56,6 +56,12 @@ export class GroceryComponent {
     this.checkedItems.set(new Set());
   }
 
+  public readonly householdItemToString = (id: unknown): string => {
+    if (!id || typeof id !== 'string') return 'All Authorized (Combined Kitchen)';
+    const hh = this.activeHouseholds().find(h => h.id === id);
+    return hh ? `${hh.name} (${hh.default_headcount}p)` : 'All Authorized (Combined Kitchen)';
+  };
+
   public setHouseholdFilter(val: string | null | undefined): void {
     this.selectedHouseholdFilter.set(val || '');
     this.checkedItems.set(new Set());

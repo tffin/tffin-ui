@@ -44,11 +44,11 @@
       @if (activeHouseholds().length > 1) {
         <div class="flex items-center gap-2">
           <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Household:</span>
-          <hlm-select [value]="selectedHouseholdFilter()" (valueChange)="setHouseholdFilter($event)">
+          <hlm-select [value]="selectedHouseholdFilter()" [itemToString]="householdItemToString" (valueChange)="setHouseholdFilter($event)">
             <hlm-select-trigger class="w-64 h-8 bg-input border-border text-xs">
               <hlm-select-value placeholder="All Authorized (Combined Kitchen)" />
             </hlm-select-trigger>
-            <hlm-select-content class="bg-popover border-border">
+            <hlm-select-content *hlmSelectPortal class="bg-popover border-border">
               <hlm-select-item value="">All Authorized (Combined Kitchen)</hlm-select-item>
               @for (hh of activeHouseholds(); track hh.id) {
                 <hlm-select-item [value]="hh.id">{{ hh.name }} ({{ hh.default_headcount }}p)</hlm-select-item>

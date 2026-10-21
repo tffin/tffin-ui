@@ -36,11 +36,11 @@ export interface HouseholdInviteDialogData {
       @if (!generatedInvite()) {
         <div class="space-y-1.5">
           <label hlmLabel>Role in Household</label>
-          <hlm-select [value]="inviteRole()" (valueChange)="onRoleChange($event)">
+          <hlm-select [value]="inviteRole()" [itemToString]="roleItemToString" (valueChange)="onRoleChange($event)">
             <hlm-select-trigger class="w-full h-9 bg-input border-border text-sm">
               <hlm-select-value placeholder="Select role..." />
             </hlm-select-trigger>
-            <hlm-select-content class="bg-popover border-border">
+            <hlm-select-content *hlmSelectPortal class="bg-popover border-border">
               <hlm-select-item value="member">Household Member (View &amp; plan meals)</hlm-select-item>
               <hlm-select-item value="owner">Household Owner (Full admin access)</hlm-select-item>
               <hlm-select-item value="viewer">Viewer (Read-only)</hlm-select-item>
@@ -61,11 +61,11 @@ export interface HouseholdInviteDialogData {
 
         <div class="space-y-1.5">
           <label hlmLabel>Link Expiration</label>
-          <hlm-select [value]="inviteExpiryDays().toString()" (valueChange)="onExpiryChange($event)">
+          <hlm-select [value]="inviteExpiryDays().toString()" [itemToString]="expiryItemToString" (valueChange)="onExpiryChange($event)">
             <hlm-select-trigger class="w-full h-9 bg-input border-border text-sm">
               <hlm-select-value placeholder="Select expiration..." />
             </hlm-select-trigger>
-            <hlm-select-content class="bg-popover border-border">
+            <hlm-select-content *hlmSelectPortal class="bg-popover border-border">
               <hlm-select-item value="3">3 Days</hlm-select-item>
               <hlm-select-item value="7">7 Days (Standard)</hlm-select-item>
               <hlm-select-item value="14">14 Days</hlm-select-item>
@@ -130,6 +130,27 @@ export class HouseholdInviteDialogComponent {
   public generatedInvite = signal<HouseholdInvitation | null>(null);
   public copiedInviteLink = signal<boolean>(false);
   public isCreating = signal<boolean>(false);
+
+  public readonly roleMap: Record<string, string> = {
+    member: 'Household Member (View & plan meals)',
+    owner: 'Household Owner (Full admin access)',
+    viewer: 'Viewer (Read-only)',
+  };
+
+  public readonly expiryMap: Record<string, string> = {
+    '3': '3 Days',
+    '7': '7 Days (Standard)',
+    '14': '14 Days',
+    '30': '30 Days',
+  };
+
+  public readonly roleItemToString = (val: unknown): string => {
+    return (typeof val === 'string' && this.roleMap[val]) || '';
+  };
+
+  public readonly expiryItemToString = (val: unknown): string => {
+    return (typeof val === 'string' && this.expiryMap[val]) || '';
+  };
 
   public onRoleChange(role: string | null | undefined): void {
     if (role) {

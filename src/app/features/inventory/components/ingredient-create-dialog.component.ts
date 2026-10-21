@@ -42,11 +42,11 @@ import { IngredientCategory, MeasurementUnit } from '../../../core/models/ingred
       <div class="grid grid-cols-2 gap-3">
         <div class="space-y-1.5">
           <label hlmLabel>Category</label>
-          <hlm-select [value]="newCategory()" (valueChange)="onCategoryChange($event)">
+          <hlm-select [value]="newCategory()" [itemToString]="categoryItemToString" (valueChange)="onCategoryChange($event)">
             <hlm-select-trigger class="w-full h-9 bg-input border-border">
               <hlm-select-value placeholder="Select category..." />
             </hlm-select-trigger>
-            <hlm-select-content class="bg-popover border-border">
+            <hlm-select-content *hlmSelectPortal class="bg-popover border-border">
               <hlm-select-item value="produce">Produce (Vegetables, Greens)</hlm-select-item>
               <hlm-select-item value="dairy">Dairy (Milk, Paneer, Curd)</hlm-select-item>
               <hlm-select-item value="spices">Spices & Condiments</hlm-select-item>
@@ -57,11 +57,11 @@ import { IngredientCategory, MeasurementUnit } from '../../../core/models/ingred
 
         <div class="space-y-1.5">
           <label hlmLabel>Standard Unit</label>
-          <hlm-select [value]="newUnit()" (valueChange)="onUnitChange($event)">
+          <hlm-select [value]="newUnit()" [itemToString]="unitItemToString" (valueChange)="onUnitChange($event)">
             <hlm-select-trigger class="w-full h-9 bg-input border-border">
               <hlm-select-value placeholder="Select unit..." />
             </hlm-select-trigger>
-            <hlm-select-content class="bg-popover border-border">
+            <hlm-select-content *hlmSelectPortal class="bg-popover border-border">
               <hlm-select-item value="g">Grams (g)</hlm-select-item>
               <hlm-select-item value="kg">Kilograms (kg)</hlm-select-item>
               <hlm-select-item value="ml">Milliliters (ml)</hlm-select-item>
@@ -113,6 +113,28 @@ export class IngredientCreateDialogComponent {
   public newUnit = signal<MeasurementUnit>('g');
   public newInitialStock = signal<number>(500);
   public newMinThreshold = signal<number>(250);
+
+  public readonly categoryMap: Record<string, string> = {
+    produce: 'Produce (Vegetables, Greens)',
+    dairy: 'Dairy (Milk, Paneer, Curd)',
+    spices: 'Spices & Condiments',
+    staples: 'Staples (Rice, Dal, Flour, Oil)',
+  };
+
+  public readonly unitMap: Record<string, string> = {
+    g: 'Grams (g)',
+    kg: 'Kilograms (kg)',
+    ml: 'Milliliters (ml)',
+    pcs: 'Pieces (pcs)',
+  };
+
+  public readonly categoryItemToString = (val: unknown): string => {
+    return (typeof val === 'string' && this.categoryMap[val]) || '';
+  };
+
+  public readonly unitItemToString = (val: unknown): string => {
+    return (typeof val === 'string' && this.unitMap[val]) || '';
+  };
 
   public onCategoryChange(cat: string | null | undefined): void {
     if (cat) {

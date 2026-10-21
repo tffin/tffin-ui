@@ -141,6 +141,12 @@ export class DashboardComponent {
     }
   }
 
+  public readonly householdItemToString = (id: unknown): string => {
+    if (!id || typeof id !== 'string') return 'All Authorized (Overview)';
+    const hh = this.activeHouseholds().find(h => h.id === id);
+    return hh ? `${hh.name} (${hh.default_headcount}p)` : 'All Authorized (Overview)';
+  };
+
   public setFilterValue(val: string | null | undefined): void {
     this.store.setSelectedHousehold(val ? val : null);
   }

@@ -88,6 +88,12 @@ export class PlannerComponent {
     this.weekOffset.set(0);
   }
 
+  public readonly householdItemToString = (id: unknown): string => {
+    if (!id || typeof id !== 'string') return 'All Authorized (Overview)';
+    const hh = this.activeHouseholds().find(h => h.id === id);
+    return hh ? `${hh.name} (${hh.default_headcount}p)` : 'All Authorized (Overview)';
+  };
+
   public setPlannerHouseholdValue(householdId: string | null | undefined): void {
     this.store.setSelectedHousehold(householdId ? householdId : null);
   }

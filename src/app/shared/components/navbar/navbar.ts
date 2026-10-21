@@ -101,6 +101,12 @@ export class NavbarComponent {
     return this.store.lowStockCount();
   }
 
+  public readonly householdItemToString = (id: unknown): string => {
+    if (!id || typeof id !== 'string') return 'All Authorized';
+    const hh = this.authorizedHouseholds().find(h => h.id === id);
+    return hh ? hh.name : 'Select Household...';
+  };
+
   public onSelectHouseholdValue(val: string | null | undefined): void {
     this.householdService.setSelectedHousehold(val ? val : null);
   }

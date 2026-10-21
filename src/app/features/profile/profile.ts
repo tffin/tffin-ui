@@ -25,6 +25,7 @@ import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmLabel } from '@spartan-ng/helm/label';
 import { HlmTextarea } from '@spartan-ng/helm/textarea';
 import { HlmAlertImports } from '@spartan-ng/helm/alert';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { AuthService } from '../../core/services/auth.service';
 import { MealStoreService } from '../../core/services/meal-store.service';
 import { AppUser } from '../../core/models/user.model';
@@ -68,7 +69,8 @@ export const AVATAR_PRESETS: AvatarPreset[] = [
     HlmInput,
     HlmLabel,
     HlmTextarea,
-    HlmAlertImports
+    HlmAlertImports,
+    HlmSelectImports
   ],
   providers: [
     provideIcons({
@@ -141,6 +143,12 @@ export class ProfileComponent implements OnInit {
     }
     return name.slice(0, 2).toUpperCase();
   });
+
+  public readonly householdItemToString = (id: unknown): string => {
+    if (!id || typeof id !== 'string') return 'None / Unassigned';
+    const hh = this.authorizedHouseholds().find(h => h.id === id);
+    return hh ? `🏠 ${hh.name} (${hh.code || 'HH'}) - ${hh.default_headcount} portions` : 'None / Unassigned';
+  };
 
   public isDirty = computed(() => {
     const u = this.currentUser();

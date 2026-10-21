@@ -47,11 +47,11 @@ export interface MealAssignDialogData {
     <div class="space-y-4 py-3">
       <div class="space-y-1.5">
         <label hlmLabel>Target Household / Client *</label>
-        <hlm-select [value]="selectedHouseholdId()" (valueChange)="onHouseholdChange($event)">
+        <hlm-select [value]="selectedHouseholdId()" [itemToString]="householdItemToString" (valueChange)="onHouseholdChange($event)">
           <hlm-select-trigger class="w-full">
             <hlm-select-value placeholder="Select household..." />
           </hlm-select-trigger>
-          <hlm-select-content>
+          <hlm-select-content *hlmSelectPortal class="bg-popover border border-border">
             @for (hh of activeHouseholds(); track hh.id) {
               <hlm-select-item [value]="hh.id">
                 {{ hh.name }} ({{ hh.code || 'HH' }}) - {{ hh.default_headcount }} pers.
@@ -63,11 +63,11 @@ export interface MealAssignDialogData {
 
       <div class="space-y-1.5">
         <label hlmLabel>Select Dish from Catalog *</label>
-        <hlm-select [value]="selectedDishId()" (valueChange)="onDishChange($event)">
+        <hlm-select [value]="selectedDishId()" [itemToString]="dishItemToString" (valueChange)="onDishChange($event)">
           <hlm-select-trigger class="w-full">
             <hlm-select-value placeholder="Select dish..." />
           </hlm-select-trigger>
-          <hlm-select-content>
+          <hlm-select-content *hlmSelectPortal class="bg-popover border border-border max-h-56">
             @for (dish of dishes(); track dish.id) {
               <hlm-select-item [value]="dish.id">{{ dish.name }}</hlm-select-item>
             }
@@ -123,6 +123,18 @@ export class MealAssignDialogComponent {
     }
     return this.data.dateStr;
   });
+
+  public readonly householdItemToString = (id: unknown): string => {
+    if (!id || typeof id !== 'string') return '';
+    const hh = this.store.householdsMap().get(id);
+    return hh ? `${hh.name} (${hh.code || 'HH'}) - ${hh.default_headcount} pers.` : '';
+  };
+
+  public readonly dishItemToString = (id: unknown): string => {
+    if (!id || typeof id !== 'string') return '';
+    const dish = this.dishes().find(d => d.id === id);
+    return dish ? dish.name : '';
+  };
 
   public onHouseholdChange(householdId: string | null | undefined): void {
     if (!householdId) return;

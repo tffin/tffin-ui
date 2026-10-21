@@ -259,19 +259,20 @@
 
         <!-- Primary Household Selector -->
         <div class="space-y-1.5 md:col-span-2">
-          <label hlmLabel for="primaryHousehold">Default / Primary Household</label>
-          <select 
-            id="primaryHousehold"
-            class="w-full h-9 rounded-md border border-input bg-input px-3 py-1 text-sm text-foreground shadow-sm focus:outline-none focus:ring-1 focus:ring-ring" 
-            [value]="selectedHouseholdId()" 
-            (change)="selectedHouseholdId.set($any($event.target).value)">
-            <option value="">None / Unassigned</option>
-            @for (hh of authorizedHouseholds(); track hh.id) {
-              <option [value]="hh.id">
-                🏠 {{ hh.name }} ({{ hh.code || 'HH' }}) - {{ hh.default_headcount }} portions
-              </option>
-            }
-          </select>
+          <label hlmLabel>Default / Primary Household</label>
+          <hlm-select [value]="selectedHouseholdId() || ''" [itemToString]="householdItemToString" (valueChange)="selectedHouseholdId.set($event || '')">
+            <hlm-select-trigger class="w-full h-9 bg-input border-border text-sm">
+              <hlm-select-value placeholder="None / Unassigned" />
+            </hlm-select-trigger>
+            <hlm-select-content *hlmSelectPortal class="bg-popover border-border">
+              <hlm-select-item value="">None / Unassigned</hlm-select-item>
+              @for (hh of authorizedHouseholds(); track hh.id) {
+                <hlm-select-item [value]="hh.id">
+                  🏠 {{ hh.name }} ({{ hh.code || 'HH' }}) - {{ hh.default_headcount }} portions
+                </hlm-select-item>
+              }
+            </hlm-select-content>
+          </hlm-select>
           <span class="text-[11px] text-muted-foreground block">This household is selected automatically when you open the meal planner and kitchen dashboard.</span>
         </div>
 

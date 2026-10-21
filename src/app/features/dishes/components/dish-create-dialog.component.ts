@@ -70,11 +70,11 @@ interface RecipeIngredientRow {
           @for (row of newIngredients(); track $index; let idx = $index) {
             <div class="flex items-center gap-2 p-2 rounded-lg bg-surface border border-border">
               <div class="flex-1">
-                <hlm-select [value]="row.ingredient_id" (valueChange)="onIngredientChange(idx, $event)">
+                <hlm-select [value]="row.ingredient_id" [itemToString]="ingredientItemToString" (valueChange)="onIngredientChange(idx, $event)">
                   <hlm-select-trigger class="w-full h-8 text-xs bg-input border-border">
                     <hlm-select-value placeholder="Select ingredient..." />
                   </hlm-select-trigger>
-                  <hlm-select-content class="bg-popover border-border max-h-56">
+                  <hlm-select-content *hlmSelectPortal class="bg-popover border-border max-h-56">
                     @for (ing of masterIngredients(); track ing.id) {
                       <hlm-select-item [value]="ing.id">{{ ing.name }} ({{ ing.category }})</hlm-select-item>
                     }
@@ -129,6 +129,12 @@ export class DishCreateDialogComponent {
 
   public masterIngredients = this.store.ingredients;
   public ingredientsMap = this.store.ingredientsMap;
+
+  public readonly ingredientItemToString = (id: unknown): string => {
+    if (!id || typeof id !== 'string') return '';
+    const ing = this.ingredientsMap().get(id);
+    return ing ? `${ing.name} (${ing.category})` : '';
+  };
 
   constructor() {
     const firstIng = this.masterIngredients()[0]?.id || '';
