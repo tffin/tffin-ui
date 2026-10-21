@@ -1,5 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus, lucideSearch, lucideTrash2, lucideFileText } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmBadge } from '@spartan-ng/helm/badge';
@@ -13,10 +15,19 @@ import { DishCreateDialogComponent } from './components/dish-create-dialog.compo
   standalone: true,
   imports: [
     CommonModule,
+    NgIcon,
     HlmButton,
     HlmInput,
     HlmBadge,
     HlmCardImports
+  ],
+  providers: [
+    provideIcons({
+      lucidePlus,
+      lucideSearch,
+      lucideTrash2,
+      lucideFileText
+    })
   ],
   templateUrl: './dishes.html',
   styleUrl: './dishes.scss'

@@ -31,14 +31,10 @@
         <button (click)="resetToToday()" hlmBtn variant="secondary" size="sm">Current Week</button>
         <div class="week-buttons flex items-center gap-1">
           <button (click)="prevWeek()" hlmBtn variant="secondary" size="icon-sm" title="Previous 7 Days">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
+            <ng-icon name="lucideChevronLeft" size="14" />
           </button>
           <button (click)="nextWeek()" hlmBtn variant="secondary" size="icon-sm" title="Next 7 Days">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
+            <ng-icon name="lucideChevronRight" size="14" />
           </button>
         </div>
       </div>

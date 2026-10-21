@@ -1,6 +1,17 @@
 import { Component, computed, effect, inject, OnInit, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { 
+  lucidePlus, 
+  lucideLogIn, 
+  lucideUserPlus, 
+  lucidePencil, 
+  lucideTrash2, 
+  lucideX, 
+  lucideLink, 
+  lucideCheckCircle2 
+} from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -24,12 +35,25 @@ import { HouseholdDeleteDialogComponent } from './components/household-delete-di
   imports: [
     CommonModule,
     RouterLink,
+    NgIcon,
     HlmButton,
     HlmBadge,
     HlmCardImports,
     HlmBreadcrumbImports,
     HlmSelectImports,
     HlmInput
+  ],
+  providers: [
+    provideIcons({
+      lucidePlus,
+      lucideLogIn,
+      lucideUserPlus,
+      lucidePencil,
+      lucideTrash2,
+      lucideX,
+      lucideLink,
+      lucideCheckCircle2
+    })
   ],
   templateUrl: './household-management.html',
   styleUrl: './household-management.scss'

@@ -2,6 +2,20 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { 
+  lucideX, 
+  lucideSave, 
+  lucideCamera, 
+  lucideShieldCheck, 
+  lucideUser, 
+  lucideSmile, 
+  lucideLock, 
+  lucideHome, 
+  lucideInfo, 
+  lucideLogOut, 
+  lucideArrowRight 
+} from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -45,6 +59,7 @@ export const AVATAR_PRESETS: AvatarPreset[] = [
     CommonModule,
     FormsModule,
     RouterLink,
+    NgIcon,
     HlmButton,
     HlmBadge,
     HlmCardImports,
@@ -54,6 +69,21 @@ export const AVATAR_PRESETS: AvatarPreset[] = [
     HlmLabel,
     HlmTextarea,
     HlmAlertImports
+  ],
+  providers: [
+    provideIcons({
+      lucideX,
+      lucideSave,
+      lucideCamera,
+      lucideShieldCheck,
+      lucideUser,
+      lucideSmile,
+      lucideLock,
+      lucideHome,
+      lucideInfo,
+      lucideLogOut,
+      lucideArrowRight
+    })
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss'

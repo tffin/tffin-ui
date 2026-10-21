@@ -1,6 +1,19 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { 
+  lucideCalendar, 
+  lucideShoppingBag, 
+  lucideUsers, 
+  lucideHome, 
+  lucideCookingPot, 
+  lucideAlertTriangle, 
+  lucidePencil, 
+  lucideFileText, 
+  lucideCheckCircle2, 
+  lucideAlertCircle 
+} from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -24,11 +37,26 @@ export interface BatchPrepDish {
   imports: [
     CommonModule,
     RouterLink,
+    NgIcon,
     HlmButton,
     HlmBadge,
     HlmCardImports,
     HlmProgressImports,
     HlmSelectImports
+  ],
+  providers: [
+    provideIcons({
+      lucideCalendar,
+      lucideShoppingBag,
+      lucideUsers,
+      lucideHome,
+      lucideCookingPot,
+      lucideAlertTriangle,
+      lucidePencil,
+      lucideFileText,
+      lucideCheckCircle2,
+      lucideAlertCircle
+    })
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'

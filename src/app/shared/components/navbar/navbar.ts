@@ -2,6 +2,19 @@ import { Component, computed, HostListener, inject, signal } from '@angular/core
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { 
+  lucideMenu, 
+  lucideX, 
+  lucideCookingPot, 
+  lucideLayoutDashboard, 
+  lucideCalendar, 
+  lucideUtensilsCrossed, 
+  lucidePackage, 
+  lucideShoppingCart, 
+  lucideUsers, 
+  lucideLogOut 
+} from '@ng-icons/lucide';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { HlmAvatarImports } from '@spartan-ng/helm/avatar';
@@ -16,9 +29,24 @@ import { AuthService } from '../../../core/services/auth.service';
     CommonModule,
     RouterLink,
     RouterLinkActive,
+    NgIcon,
     HlmBadge,
     HlmSelectImports,
     HlmAvatarImports
+  ],
+  providers: [
+    provideIcons({
+      lucideMenu,
+      lucideX,
+      lucideCookingPot,
+      lucideLayoutDashboard,
+      lucideCalendar,
+      lucideUtensilsCrossed,
+      lucidePackage,
+      lucideShoppingCart,
+      lucideUsers,
+      lucideLogOut
+    })
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'

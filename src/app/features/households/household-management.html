@@ -20,31 +20,19 @@
     <div class="header-actions flex flex-wrap items-center gap-2">
       @if (hasNoHouseholds() || canManage()) {
         <button hlmBtn (click)="openCreateModal()" class="gap-2" title="Create a new household">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
+          <ng-icon name="lucidePlus" size="16" />
           <span>Create Household</span>
         </button>
       }
 
       <button hlmBtn variant="secondary" (click)="openJoinModal()" class="gap-2" title="Join a household using an invite code">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-          <polyline points="10 17 15 12 10 7"></polyline>
-          <line x1="15" y1="12" x2="3" y2="12"></line>
-        </svg>
+        <ng-icon name="lucideLogIn" size="16" />
         <span>Join with Code</span>
       </button>
 
       @if (canManage() && !hasNoHouseholds()) {
         <button hlmBtn variant="outline" (click)="openInviteModal()" class="gap-2" title="Invite a new member to this household">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <line x1="20" y1="8" x2="20" y2="14"></line>
-            <line x1="23" y1="11" x2="17" y2="11"></line>
-          </svg>
+          <ng-icon name="lucideUserPlus" size="16" />
           <span>Invite Members</span>
         </button>
       }
@@ -85,19 +73,12 @@
 
       <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
         <button hlmBtn (click)="openCreateModal()" class="gap-2">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
+          <ng-icon name="lucidePlus" size="18" />
           <span>Create Your Household</span>
         </button>
 
         <button hlmBtn variant="secondary" (click)="openJoinModal()" class="gap-2">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-            <polyline points="10 17 15 12 10 7"></polyline>
-            <line x1="15" y1="12" x2="3" y2="12"></line>
-          </svg>
+          <ng-icon name="lucideLogIn" size="18" />
           <span>Join Existing with Code</span>
         </button>
       </div>
@@ -145,19 +126,11 @@
             @if (canManage()) {
               <div class="flex items-center gap-2">
                 <button hlmBtn variant="outline" size="sm" (click)="openEditModal()" class="gap-1.5" title="Edit household profile">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                    <path d="M12 20h9"></path>
-                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                  </svg>
+                  <ng-icon name="lucidePencil" size="14" />
                   <span>Edit Profile</span>
                 </button>
                 <button hlmBtn variant="destructive" size="sm" (click)="openDeleteModal()" class="gap-1.5" title="Delete this household">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                    <polyline points="3 6 5 6 21 6"></polyline>
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                    <line x1="14" y1="11" x2="14" y2="17"></line>
-                  </svg>
+                  <ng-icon name="lucideTrash2" size="14" />
                   <span>Delete</span>
                 </button>
               </div>
@@ -245,10 +218,7 @@
                         (click)="removeMember(mem.user_id, mem.fullName || mem.username || 'Member')" 
                         class="text-muted-foreground hover:text-destructive" 
                         title="Remove member from this household">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                          <line x1="18" y1="6" x2="6" y2="18"></line>
-                          <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
+                        <ng-icon name="lucideX" size="14" />
                       </button>
                     }
                   </div>
@@ -265,10 +235,7 @@
         <div hlmCard class="invite-hero-card p-6 border border-border bg-card">
           <div class="flex items-start gap-3 pb-4 border-b border-border">
             <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-              </svg>
+              <ng-icon name="lucideLink" size="20" />
             </div>
             <div>
               <h3 class="font-bold text-foreground text-base">Invite New Members</h3>
@@ -318,10 +285,7 @@
           } @else {
             <div class="space-y-3 pt-4">
               <div class="p-2.5 rounded-lg border border-emerald-500/30 bg-emerald-950/20 text-emerald-400 font-semibold text-xs flex items-center gap-2">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                </svg>
+                <ng-icon name="lucideCheckCircle2" size="16" />
                 <span>Invite link ready to share!</span>
               </div>
 

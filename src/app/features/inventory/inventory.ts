@@ -1,5 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus, lucideSearch } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmInput } from '@spartan-ng/helm/input';
@@ -14,11 +16,18 @@ import { IngredientCreateDialogComponent } from './components/ingredient-create-
   standalone: true,
   imports: [
     CommonModule,
+    NgIcon,
     HlmButton,
     HlmBadge,
     HlmInput,
     HlmTableImports,
     HlmProgressImports
+  ],
+  providers: [
+    provideIcons({
+      lucidePlus,
+      lucideSearch
+    })
   ],
   templateUrl: './inventory.html',
   styleUrl: './inventory.scss'

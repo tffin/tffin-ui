@@ -6,11 +6,8 @@
       <p class="page-desc">Normalized recipe composition with per-person quantities and dynamic batch portion scaling.</p>
     </div>
 
-    <button (click)="openCreateModal()" hlmBtn>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-        <line x1="12" y1="5" x2="12" y2="19"></line>
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-      </svg>
+    <button (click)="openCreateModal()" hlmBtn class="gap-1.5">
+      <ng-icon name="lucidePlus" size="16" />
       <span>Create New Dish</span>
     </button>
   </div>
@@ -18,10 +15,7 @@
   <!-- Filter & Portion Scaler Bar -->
   <div class="toolbar-bar">
     <div class="search-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
+      <ng-icon name="lucideSearch" size="16" />
       <input 
         hlmInput 
         type="text" 
@@ -73,19 +67,13 @@
             (click)="deleteDish(dish.id)" 
             class="text-muted-foreground hover:text-rose hover:bg-rose/10" 
             title="Delete Dish">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-            </svg>
+            <ng-icon name="lucideTrash2" size="16" />
           </button>
         </div>
 
         @if (dish.cook_notes) {
           <div class="cook-notes-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-            </svg>
+            <ng-icon name="lucideFileText" size="14" />
             <p>{{ dish.cook_notes }}</p>
           </div>
         }

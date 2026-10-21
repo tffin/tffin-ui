@@ -1,6 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideCookingPot,
+  lucideUser,
+  lucideLock,
+  lucideEye,
+  lucideEyeOff,
+  lucideArrowRight
+} from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmLabel } from '@spartan-ng/helm/label';
@@ -13,11 +22,22 @@ import { AuthService } from '../../core/services/auth.service';
   standalone: true,
   imports: [
     CommonModule,
+    NgIcon,
     HlmButton,
     HlmInput,
     HlmLabel,
     HlmAlertImports,
     HlmCheckbox
+  ],
+  providers: [
+    provideIcons({
+      lucideCookingPot,
+      lucideUser,
+      lucideLock,
+      lucideEye,
+      lucideEyeOff,
+      lucideArrowRight
+    })
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss'

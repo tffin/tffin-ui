@@ -1,5 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -23,10 +25,17 @@ export interface DayColumn {
   standalone: true,
   imports: [
     CommonModule,
+    NgIcon,
     HlmButton,
     HlmBadge,
     HlmCardImports,
     HlmSelectImports
+  ],
+  providers: [
+    provideIcons({
+      lucideChevronLeft,
+      lucideChevronRight
+    })
   ],
   templateUrl: './planner.html',
   styleUrl: './planner.scss'

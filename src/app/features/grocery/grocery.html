@@ -8,9 +8,7 @@
 
     @if (shortages().length > 0) {
       <button hlmBtn (click)="restockAll()" class="gap-2 self-start md:self-auto bg-emerald-600 hover:bg-emerald-500 text-white">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
+        <ng-icon name="lucideCheck" size="16" />
         <span>One-Click Restock All Deficits</span>
       </button>
     }
@@ -72,10 +70,7 @@
   @if (shortages().length === 0) {
     <div hlmCard class="all-stocked-card text-center py-16 px-4 border border-border bg-card">
       <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-          <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
+        <ng-icon name="lucideCheckCircle2" size="32" />
       </div>
       <h2 class="text-xl font-bold text-foreground">Pantry is Fully Stocked!</h2>
       <p class="text-sm text-muted-foreground mt-2 max-w-md mx-auto">All scheduled meals over the next {{ daysHorizon() }} days have sufficient ingredients on hand. No shopping run required!</p>

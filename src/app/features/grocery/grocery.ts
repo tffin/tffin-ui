@@ -1,5 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck, lucideCheckCircle2 } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -14,12 +16,19 @@ import { ShortageReportItem } from '../../core/models/meal-schedule.model';
   standalone: true,
   imports: [
     CommonModule,
+    NgIcon,
     HlmButton,
     HlmBadge,
     HlmCardImports,
     HlmTableImports,
     HlmCheckbox,
     HlmSelectImports
+  ],
+  providers: [
+    provideIcons({
+      lucideCheck,
+      lucideCheckCircle2
+    })
   ],
   templateUrl: './grocery.html',
   styleUrl: './grocery.scss'
