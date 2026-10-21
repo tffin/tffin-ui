@@ -3,64 +3,131 @@ Design Tokens & CSS Variables - Tiffin Kitchen Admin UI
 ========================================================================== */
 
 :root {
-/* Color Palette - Culinary Dark Theme with Warm Accents */
---bg-app: #0b0f19;
---bg-surface: #111827;
---bg-card: #172033;
---bg-card-hover: #1e2942;
---bg-card-glass: rgba(23, 32, 51, 0.85);
---bg-input: #0f1624;
+  /* Color Palette Tokens */
+  --color-lime-cream-50: #f9faeb;
+  --color-lime-cream-100: #f3f5d6;
+  --color-lime-cream-200: #e6eaae;
+  --color-lime-cream-300: #dae085;
+  --color-lime-cream-400: #cdd55d;
+  --color-lime-cream-500: #c1cb34;
+  --color-lime-cream-600: #9aa22a;
+  --color-lime-cream-700: #747a1f;
+  --color-lime-cream-800: #4d5115;
+  --color-lime-cream-900: #27290a;
+  --color-lime-cream-950: #1b1c07;
 
---border-subtle: #242f47;
---border-medium: #334155;
---border-focus: #f59e0b;
+  --color-dry-sage-50: #f4f6ef;
+  --color-dry-sage-100: #e8ecdf;
+  --color-dry-sage-200: #d1dabe;
+  --color-dry-sage-300: #bac79e;
+  --color-dry-sage-400: #a3b57d;
+  --color-dry-sage-500: #8ca25d;
+  --color-dry-sage-600: #70824a;
+  --color-dry-sage-700: #546138;
+  --color-dry-sage-800: #384125;
+  --color-dry-sage-900: #1c2013;
+  --color-dry-sage-950: #14170d;
 
---text-primary: #f8fafc;
---text-secondary: #94a3b8;
---text-muted: #64748b;
---text-inverse: #0f172a;
+  --color-dusty-olive-neutral-50: #f3f3f1;
+  --color-dusty-olive-neutral-100: #e6e8e3;
+  --color-dusty-olive-neutral-200: #cdd1c7;
+  --color-dusty-olive-neutral-300: #b4b9ac;
+  --color-dusty-olive-neutral-400: #9ba290;
+  --color-dusty-olive-neutral-500: #828b74;
+  --color-dusty-olive-neutral-600: #686f5d;
+  --color-dusty-olive-neutral-700: #4e5346;
+  --color-dusty-olive-neutral-800: #34382e;
+  --color-dusty-olive-neutral-900: #1a1c17;
+  --color-dusty-olive-neutral-950: #121310;
 
-/* Accent Colors */
---primary: #f59e0b;
---primary-hover: #fbbf24;
---primary-dark: #d97706;
---primary-glow: rgba(245, 158, 11, 0.2);
---primary-subtle: rgba(245, 158, 11, 0.12);
+  --color-dusty-olive-50: #f2f4f1;
+  --color-dusty-olive-100: #e6e9e2;
+  --color-dusty-olive-200: #ccd2c6;
+  --color-dusty-olive-300: #b3bca9;
+  --color-dusty-olive-400: #99a58d;
+  --color-dusty-olive-500: #808f70;
+  --color-dusty-olive-600: #66725a;
+  --color-dusty-olive-700: #4d5643;
+  --color-dusty-olive-800: #33392d;
+  --color-dusty-olive-900: #1a1d16;
+  --color-dusty-olive-950: #121410;
 
---emerald: #10b981;
---emerald-hover: #34d399;
---emerald-glow: rgba(16, 185, 129, 0.2);
---emerald-subtle: rgba(16, 185, 129, 0.12);
+  --color-dark-khaki-50: #f4f3f0;
+  --color-dark-khaki-100: #eae8e1;
+  --color-dark-khaki-200: #d4d0c4;
+  --color-dark-khaki-300: #bfb9a6;
+  --color-dark-khaki-400: #a9a289;
+  --color-dark-khaki-500: #948a6b;
+  --color-dark-khaki-600: #766f56;
+  --color-dark-khaki-700: #595340;
+  --color-dark-khaki-800: #3b372b;
+  --color-dark-khaki-900: #1e1c15;
+  --color-dark-khaki-950: #15130f;
 
---rose: #f43f5e;
---rose-glow: rgba(244, 63, 94, 0.2);
---rose-subtle: rgba(244, 63, 94, 0.12);
+  /* Culinary Earthy Dark Theme with Lime Cream & Dry Sage */
+  --bg-app: var(--color-dusty-olive-950);
+  --bg-surface: var(--color-dusty-olive-900);
+  --bg-card: #20251c;
+  --bg-card-hover: var(--color-dusty-olive-800);
+  --bg-card-glass: rgba(26, 29, 22, 0.85);
+  --bg-input: #151812;
 
---sky: #0ea5e9;
---sky-subtle: rgba(14, 165, 233, 0.12);
+  --border-subtle: #2d3425;
+  --border-medium: var(--color-dusty-olive-700);
+  --border-focus: var(--color-lime-cream-500);
 
---purple: #8b5cf6;
---purple-subtle: rgba(139, 92, 246, 0.12);
+  --text-primary: var(--color-lime-cream-50);
+  --text-secondary: var(--color-dry-sage-200);
+  --text-muted: var(--color-dusty-olive-400);
+  --text-inverse: var(--color-lime-cream-950);
 
-/* Typography */
---font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
---font-heading: 'Outfit', sans-serif;
+  /* Accent Colors */
+  --primary: var(--color-lime-cream-500);
+  --primary-hover: var(--color-lime-cream-400);
+  --primary-dark: var(--color-lime-cream-600);
+  --primary-glow: rgba(193, 203, 52, 0.22);
+  --primary-subtle: rgba(193, 203, 52, 0.12);
+  --primary-foreground: var(--color-lime-cream-950);
 
-/* Radii & Shadows */
---radius-sm: 8px;
---radius-md: 12px;
---radius-lg: 16px;
---radius-xl: 24px;
---radius-full: 9999px;
+  --emerald: var(--color-dry-sage-500);
+  --emerald-hover: var(--color-dry-sage-400);
+  --emerald-glow: rgba(140, 162, 93, 0.22);
+  --emerald-subtle: rgba(140, 162, 93, 0.12);
 
---shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
---shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
---shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.45);
---shadow-glow: 0 0 25px var(--primary-glow);
+  --rose: #f43f5e;
+  --rose-glow: rgba(244, 63, 94, 0.2);
+  --rose-subtle: rgba(244, 63, 94, 0.12);
 
-/* Transitions */
---transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
---transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --sky: var(--color-dry-sage-300);
+  --sky-subtle: rgba(186, 199, 158, 0.15);
+
+  --purple: var(--color-dark-khaki-400);
+  --purple-subtle: rgba(169, 162, 137, 0.15);
+
+  --khaki: var(--color-dark-khaki-500);
+  --khaki-hover: var(--color-dark-khaki-400);
+  --khaki-glow: rgba(148, 138, 107, 0.22);
+  --khaki-subtle: rgba(148, 138, 107, 0.12);
+
+  /* Typography */
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+
+  /* Radii & Shadows */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 0 25px var(--primary-glow);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ==========================================================================
@@ -155,7 +222,7 @@ pointer-events: none;
 
 .btn-primary {
 background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-color: #0b0f19;
+color: var(--primary-foreground);
 font-weight: 700;
 box-shadow: 0 4px 12px var(--primary-glow);
 
@@ -171,7 +238,7 @@ transform: translateY(0);
 }
 
 .btn-emerald {
-background: linear-gradient(135deg, var(--emerald), #059669);
+background: linear-gradient(135deg, var(--emerald), #70824a);
 color: #ffffff;
 font-weight: 600;
 box-shadow: 0 4px 12px var(--emerald-glow);
@@ -247,16 +314,24 @@ justify-content: center;
   white-space: nowrap;
 }
 
+.badge-lime,
 .badge-amber {
   background: var(--primary-subtle) !important;
   color: var(--primary) !important;
-  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  border: 1px solid rgba(193, 203, 52, 0.35) !important;
 }
 
+.badge-sage,
 .badge-emerald {
   background: var(--emerald-subtle) !important;
   color: var(--emerald) !important;
-  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  border: 1px solid rgba(140, 162, 93, 0.35) !important;
+}
+
+.badge-khaki {
+  background: var(--khaki-subtle) !important;
+  color: var(--khaki) !important;
+  border: 1px solid rgba(148, 138, 107, 0.35) !important;
 }
 
 .badge-rose {
@@ -268,13 +343,13 @@ justify-content: center;
 .badge-sky {
   background: var(--sky-subtle) !important;
   color: var(--sky) !important;
-  border: 1px solid rgba(14, 165, 233, 0.3) !important;
+  border: 1px solid rgba(186, 199, 158, 0.35) !important;
 }
 
 .badge-purple {
   background: var(--purple-subtle) !important;
   color: var(--purple) !important;
-  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+  border: 1px solid rgba(169, 162, 137, 0.35) !important;
 }
 
 .badge-muted {
@@ -417,37 +492,37 @@ padding-right: 2.2rem;
   --font-heading: 'Outfit', sans-serif;
 
   --radius: 0.625rem;
-  --background: #0b0f19;
-  --foreground: #f8fafc;
-  --card: #172033;
-  --card-foreground: #f8fafc;
-  --popover: #111827;
-  --popover-foreground: #f8fafc;
-  --primary: #f59e0b;
-  --primary-foreground: #0b0f19;
-  --secondary: #1e2942;
-  --secondary-foreground: #f8fafc;
-  --muted: #1e2942;
-  --muted-foreground: #94a3b8;
-  --accent: #1e2942;
-  --accent-foreground: #f59e0b;
+  --background: var(--bg-app);
+  --foreground: var(--text-primary);
+  --card: var(--bg-card);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-surface);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--primary);
+  --primary-foreground: var(--primary-foreground);
+  --secondary: var(--color-dusty-olive-800);
+  --secondary-foreground: var(--color-dry-sage-100);
+  --muted: var(--color-dusty-olive-800);
+  --muted-foreground: var(--color-dusty-olive-300);
+  --accent: var(--color-dusty-olive-800);
+  --accent-foreground: var(--color-lime-cream-400);
   --destructive: #f43f5e;
   --destructive-foreground: #ffffff;
-  --border: #242f47;
-  --input: #0f1624;
-  --ring: #f59e0b;
-  --sidebar: #111827;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #f59e0b;
-  --sidebar-primary-foreground: #0b0f19;
-  --sidebar-accent: #1e2942;
-  --sidebar-accent-foreground: #f59e0b;
-  --sidebar-border: #242f47;
-  --sidebar-ring: #f59e0b;
+  --border: var(--border-subtle);
+  --input: var(--bg-input);
+  --ring: var(--primary);
+  --sidebar: var(--bg-surface);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--color-dusty-olive-800);
+  --sidebar-accent-foreground: var(--color-lime-cream-400);
+  --sidebar-border: var(--border-subtle);
+  --sidebar-ring: var(--primary);
 
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --chart-1: var(--color-lime-cream-500);
+  --chart-2: var(--color-dry-sage-500);
+  --chart-3: var(--color-dark-khaki-400);
+  --chart-4: var(--color-dusty-olive-400);
+  --chart-5: var(--color-lime-cream-300);
 }

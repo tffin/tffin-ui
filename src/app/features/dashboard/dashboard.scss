@@ -232,7 +232,7 @@
 
     &:hover {
       background: var(--primary);
-      color: #0b0f19;
+      color: var(--primary-foreground);
     }
   }
 
@@ -482,8 +482,8 @@
     outline: none;
 
     option {
-      background: #111827;
-      color: #f3f4f6;
+      background: var(--bg-surface);
+      color: var(--text-primary);
     }
   }
 }
@@ -557,9 +557,9 @@
     }
 
     .dietary-chip {
-      background: rgba(245, 158, 11, 0.1);
-      border: 1px solid rgba(245, 158, 11, 0.25);
-      color: #fbbf24;
+      background: var(--primary-subtle);
+      border: 1px solid rgba(193, 203, 52, 0.3);
+      color: var(--primary-hover);
       padding: 0.15rem 0.5rem;
       border-radius: var(--radius-sm);
       font-size: 0.72rem;

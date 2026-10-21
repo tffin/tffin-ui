@@ -2,7 +2,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(17, 24, 39, 0.92);
+  background: rgba(26, 29, 22, 0.92);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border-subtle);
   padding: 0 1.5rem;
@@ -78,7 +78,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #0b0f19;
+    color: var(--primary-foreground);
     box-shadow: 0 0 16px var(--primary-glow);
 
     svg {
@@ -196,8 +196,8 @@
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary), #b45309);
-    color: #0b0f19;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--primary-foreground);
     font-size: 0.75rem;
     font-weight: 800;
     display: flex;
@@ -573,11 +573,11 @@
   .hh-dietary {
     margin-top: 0.4rem;
     font-size: 0.75rem;
-    color: #fbbf24;
+    color: var(--primary-hover);
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    background: rgba(245, 158, 11, 0.1);
+    background: var(--primary-subtle);
     padding: 0.25rem 0.5rem;
     border-radius: var(--radius-sm);
   }
@@ -701,7 +701,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #0b0f19;
+      color: var(--primary-foreground);
       box-shadow: 0 0 14px var(--primary-glow);
 
       svg {
@@ -913,13 +913,13 @@
     }
 
     .stock-pill {
-      background: var(--amber);
-      color: #0b0f19;
+      background: var(--primary);
+      color: var(--primary-foreground);
       font-size: 0.7rem;
       font-weight: 800;
       padding: 0.15rem 0.5rem;
       border-radius: var(--radius-full);
-      box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+      box-shadow: 0 0 8px var(--primary-glow);
     }
 
     &:hover {
@@ -987,8 +987,8 @@
         width: 36px;
         height: 36px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary), #b45309);
-        color: #0b0f19;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: var(--primary-foreground);
         font-size: 0.85rem;
         font-weight: 800;
         display: flex;

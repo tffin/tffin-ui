@@ -271,7 +271,7 @@
       .dietary-title {
         font-size: 0.775rem;
         font-weight: 700;
-        color: #fbbf24;
+        color: var(--primary-hover);
       }
 
       .dietary-text {
@@ -343,8 +343,8 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), #b45309);
-      color: #0b0f19;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--primary-foreground);
       font-size: 0.85rem;
       font-weight: 800;
       display: flex;
@@ -379,9 +379,9 @@
           color: var(--text-secondary);
 
           &.role-owner {
-            background: rgba(245, 158, 11, 0.18);
-            color: #fbbf24;
-            border: 1px solid rgba(245, 158, 11, 0.4);
+            background: var(--primary-subtle);
+            color: var(--primary-hover);
+            border: 1px solid rgba(193, 203, 52, 0.4);
           }
         }
       }
@@ -480,7 +480,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: #0b0f19;
+    background: var(--bg-app);
     padding: 0.6rem 0.85rem;
     border-radius: var(--radius-md);
     border: 1px dashed var(--border-medium);
@@ -677,7 +677,7 @@
 }
 
 .modal-dialog {
-  background: #111827;
+  background: var(--bg-surface);
   border: 1px solid var(--border-medium);
   border-radius: var(--radius-lg);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8);

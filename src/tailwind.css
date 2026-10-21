@@ -1,6 +1,68 @@
 @import "tailwindcss";
 @import "@spartan-ng/brain/hlm-tailwind-preset.css";
 
+@theme {
+  --color-lime-cream-50: #f9faeb;
+  --color-lime-cream-100: #f3f5d6;
+  --color-lime-cream-200: #e6eaae;
+  --color-lime-cream-300: #dae085;
+  --color-lime-cream-400: #cdd55d;
+  --color-lime-cream-500: #c1cb34;
+  --color-lime-cream-600: #9aa22a;
+  --color-lime-cream-700: #747a1f;
+  --color-lime-cream-800: #4d5115;
+  --color-lime-cream-900: #27290a;
+  --color-lime-cream-950: #1b1c07;
+
+  --color-dry-sage-50: #f4f6ef;
+  --color-dry-sage-100: #e8ecdf;
+  --color-dry-sage-200: #d1dabe;
+  --color-dry-sage-300: #bac79e;
+  --color-dry-sage-400: #a3b57d;
+  --color-dry-sage-500: #8ca25d;
+  --color-dry-sage-600: #70824a;
+  --color-dry-sage-700: #546138;
+  --color-dry-sage-800: #384125;
+  --color-dry-sage-900: #1c2013;
+  --color-dry-sage-950: #14170d;
+
+  --color-dusty-olive-neutral-50: #f3f3f1;
+  --color-dusty-olive-neutral-100: #e6e8e3;
+  --color-dusty-olive-neutral-200: #cdd1c7;
+  --color-dusty-olive-neutral-300: #b4b9ac;
+  --color-dusty-olive-neutral-400: #9ba290;
+  --color-dusty-olive-neutral-500: #828b74;
+  --color-dusty-olive-neutral-600: #686f5d;
+  --color-dusty-olive-neutral-700: #4e5346;
+  --color-dusty-olive-neutral-800: #34382e;
+  --color-dusty-olive-neutral-900: #1a1c17;
+  --color-dusty-olive-neutral-950: #121310;
+
+  --color-dusty-olive-50: #f2f4f1;
+  --color-dusty-olive-100: #e6e9e2;
+  --color-dusty-olive-200: #ccd2c6;
+  --color-dusty-olive-300: #b3bca9;
+  --color-dusty-olive-400: #99a58d;
+  --color-dusty-olive-500: #808f70;
+  --color-dusty-olive-600: #66725a;
+  --color-dusty-olive-700: #4d5643;
+  --color-dusty-olive-800: #33392d;
+  --color-dusty-olive-900: #1a1d16;
+  --color-dusty-olive-950: #121410;
+
+  --color-dark-khaki-50: #f4f3f0;
+  --color-dark-khaki-100: #eae8e1;
+  --color-dark-khaki-200: #d4d0c4;
+  --color-dark-khaki-300: #bfb9a6;
+  --color-dark-khaki-400: #a9a289;
+  --color-dark-khaki-500: #948a6b;
+  --color-dark-khaki-600: #766f56;
+  --color-dark-khaki-700: #595340;
+  --color-dark-khaki-800: #3b372b;
+  --color-dark-khaki-900: #1e1c15;
+  --color-dark-khaki-950: #15130f;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

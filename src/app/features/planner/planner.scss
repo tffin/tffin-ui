@@ -101,7 +101,7 @@
 
 .today-pill {
   background: var(--primary) !important;
-  color: #0b0f19 !important;
+  color: var(--primary-foreground) !important;
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -195,7 +195,7 @@
 
     &:hover {
       background: var(--primary);
-      color: #0b0f19;
+      color: var(--primary-foreground);
     }
   }
 }
@@ -395,13 +395,13 @@
   display: flex;
   align-items: flex-start;
   gap: 0.65rem;
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: var(--primary-subtle);
+  border: 1px solid rgba(193, 203, 52, 0.35);
   border-radius: var(--radius-md);
   padding: 0.6rem 0.85rem;
   margin-bottom: 1rem;
   font-size: 0.8rem;
-  color: #fbbf24;
+  color: var(--primary-hover);
 
   .alert-icon {
     font-size: 1rem;
