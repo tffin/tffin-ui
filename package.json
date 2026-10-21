@@ -57,6 +57,7 @@
     "@angular/cli": "^20.3.2",
     "@angular/compiler-cli": "^20.3.0",
     "@spartan-ng/cli": "^1.8.0",
+    "@tailwindcss/postcss": "^4.3.3",
     "@types/jasmine": "~5.1.0",
     "autoprefixer": "^10.6.1",
     "husky": "^9.1.7",
