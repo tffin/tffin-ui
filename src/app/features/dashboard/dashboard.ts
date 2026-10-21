@@ -1,10 +1,17 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmBadge } from '@spartan-ng/helm/badge';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmProgressImports } from '@spartan-ng/helm/progress';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
+import { HlmDialogService } from '@spartan-ng/helm/dialog';
 import { MealStoreService, getTodayString, DayMealSlot, SlotHouseholdPlan } from '../../core/services/meal-store.service';
 import { Dish } from '../../core/models/dish.model';
 import { MealType } from '../../core/models/meal-schedule.model';
 import { Household } from '../../core/models/household.model';
+import { MealAssignDialogComponent } from './components/meal-assign-dialog.component';
 
 export interface BatchPrepDish {
   dishId: string;
@@ -16,19 +23,23 @@ export interface BatchPrepDish {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [
+    CommonModule,
+    RouterLink,
+    HlmButton,
+    HlmBadge,
+    HlmCardImports,
+    HlmProgressImports,
+    HlmSelectImports
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
 export class DashboardComponent {
   public store = inject(MealStoreService);
+  private dialogService = inject(HlmDialogService);
 
   public todayStr = signal<string>(getTodayString());
-  public isAssignModalOpen = signal<boolean>(false);
-  public selectedMealType = signal<MealType>('lunch');
-  public selectedHouseholdId = signal<string>('');
-  public selectedDishId = signal<string>('');
-  public modalHeadcount = signal<number>(3);
 
   // Computeds
   public todayMeals = this.store.todayMeals;
@@ -36,10 +47,6 @@ export class DashboardComponent {
   public lowStockItems = this.store.lowStockItems;
   public activeHouseholds = this.store.activeHouseholds;
   public currentHouseholdFilter = this.store.selectedHouseholdId;
-
-  public modalHousehold = computed(() => {
-    return this.store.householdsMap().get(this.selectedHouseholdId()) || null;
-  });
 
   public todayTotalHeadcount = computed(() => {
     return this.todayMeals().reduce((sum, item) => sum + (item.totalHeadcount || 0), 0);
@@ -113,6 +120,10 @@ export class DashboardComponent {
     this.store.setSelectedHousehold(val ? val : null);
   }
 
+  public setFilterValue(val: string | null | undefined): void {
+    this.store.setSelectedHousehold(val ? val : null);
+  }
+
   public openAssignModal(
     mealType: MealType, 
     currentDishId?: string, 
@@ -122,36 +133,15 @@ export class DashboardComponent {
     const targetHhId = this.store.resolveTargetHouseholdId(currentHouseholdId);
     const hh = this.store.householdsMap().get(targetHhId);
 
-    this.selectedMealType.set(mealType);
-    this.selectedHouseholdId.set(targetHhId);
-    this.selectedDishId.set(currentDishId || (this.dishes()[0]?.id || ''));
-    this.modalHeadcount.set(currentHeadcount !== undefined ? currentHeadcount : (hh?.default_headcount || 3));
-    this.isAssignModalOpen.set(true);
-  }
-
-  public onModalHouseholdChange(householdId: string): void {
-    this.selectedHouseholdId.set(householdId);
-    const hh = this.store.householdsMap().get(householdId);
-    if (hh) {
-      this.modalHeadcount.set(hh.default_headcount || 2);
-    }
-  }
-
-  public closeAssignModal(): void {
-    this.isAssignModalOpen.set(false);
-  }
-
-  public async saveAssignment(): Promise<void> {
-    if (!this.selectedDishId() || !this.selectedHouseholdId()) return;
-
-    await this.store.setMealSchedule(
-      this.todayStr(),
-      this.selectedMealType(),
-      this.selectedDishId(),
-      this.modalHeadcount(),
-      this.selectedHouseholdId()
-    );
-    this.closeAssignModal();
+    this.dialogService.open(MealAssignDialogComponent, {
+      context: {
+        mealType,
+        householdId: targetHhId,
+        dishId: currentDishId || (this.dishes()[0]?.id || ''),
+        headcount: currentHeadcount !== undefined ? currentHeadcount : (hh?.default_headcount || 3)
+      },
+      contentClass: 'sm:max-w-md bg-card border border-border text-card-foreground shadow-2xl rounded-2xl p-6'
+    });
   }
 
   public async incrementHeadcount(mealType: MealType, householdId: string): Promise<void> {
