@@ -2,6 +2,15 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmBadge } from '@spartan-ng/helm/badge';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
+import { HlmAvatarImports } from '@spartan-ng/helm/avatar';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmLabel } from '@spartan-ng/helm/label';
+import { HlmTextarea } from '@spartan-ng/helm/textarea';
+import { HlmAlertImports } from '@spartan-ng/helm/alert';
 import { AuthService } from '../../core/services/auth.service';
 import { MealStoreService } from '../../core/services/meal-store.service';
 import { AppUser } from '../../core/models/user.model';
@@ -32,7 +41,20 @@ export const AVATAR_PRESETS: AvatarPreset[] = [
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    HlmButton,
+    HlmBadge,
+    HlmCardImports,
+    HlmBreadcrumbImports,
+    HlmAvatarImports,
+    HlmInput,
+    HlmLabel,
+    HlmTextarea,
+    HlmAlertImports
+  ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss'
 })

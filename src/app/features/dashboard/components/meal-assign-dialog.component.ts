@@ -15,6 +15,7 @@ export interface MealAssignDialogData {
   householdId: string;
   dishId: string;
   headcount: number;
+  dateStr?: string;
 }
 
 @Component({
@@ -33,8 +34,8 @@ export interface MealAssignDialogData {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <hlm-dialog-header>
-      <h3 hlmDialogTitle>Assign Meal: {{ data.mealType | titlecase }}</h3>
-      <p hlmDialogDescription>Select household client and recipe for today.</p>
+      <h3 hlmDialogTitle>Assign Meal: {{ data.mealType | titlecase }}{{ dateLabel() ? ' • ' + dateLabel() : '' }}</h3>
+      <p hlmDialogDescription>Select household client and recipe for this schedule.</p>
     </hlm-dialog-header>
 
     @if (modalHousehold()?.dietary_notes) {
@@ -113,6 +114,16 @@ export class MealAssignDialogComponent {
     return this.store.householdsMap().get(this.selectedHouseholdId()) || null;
   });
 
+  public dateLabel = computed(() => {
+    if (!this.data.dateStr) return null;
+    const parts = this.data.dateStr.split('-');
+    if (parts.length === 3) {
+      const d = new Date(+parts[0], +parts[1] - 1, +parts[2]);
+      return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+    return this.data.dateStr;
+  });
+
   public onHouseholdChange(householdId: string | null | undefined): void {
     if (!householdId) return;
     this.selectedHouseholdId.set(householdId);
@@ -135,8 +146,9 @@ export class MealAssignDialogComponent {
   public async saveAssignment(): Promise<void> {
     if (!this.selectedDishId() || !this.selectedHouseholdId()) return;
 
+    const targetDate = this.data.dateStr || getTodayString();
     await this.store.setMealSchedule(
-      getTodayString(),
+      targetDate,
       this.data.mealType,
       this.selectedDishId(),
       this.modalHeadcount(),

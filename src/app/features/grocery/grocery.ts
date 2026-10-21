@@ -1,12 +1,26 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmBadge } from '@spartan-ng/helm/badge';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmTableImports } from '@spartan-ng/helm/table';
+import { HlmCheckbox } from '@spartan-ng/helm/checkbox';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { MealStoreService } from '../../core/services/meal-store.service';
 import { ShortageReportItem } from '../../core/models/meal-schedule.model';
 
 @Component({
   selector: 'app-grocery',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    HlmButton,
+    HlmBadge,
+    HlmCardImports,
+    HlmTableImports,
+    HlmCheckbox,
+    HlmSelectImports
+  ],
   templateUrl: './grocery.html',
   styleUrl: './grocery.scss'
 })
@@ -33,9 +47,8 @@ export class GroceryComponent {
     this.checkedItems.set(new Set());
   }
 
-  public setHouseholdFilter(event: Event): void {
-    const val = (event.target as HTMLSelectElement).value;
-    this.selectedHouseholdFilter.set(val);
+  public setHouseholdFilter(val: string | null | undefined): void {
+    this.selectedHouseholdFilter.set(val || '');
     this.checkedItems.set(new Set());
   }
 

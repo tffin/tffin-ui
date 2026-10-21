@@ -1,9 +1,15 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmBadge } from '@spartan-ng/helm/badge';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
+import { HlmDialogService } from '@spartan-ng/helm/dialog';
 import { MealStoreService, getTodayString, DayMealSlot, SlotHouseholdPlan } from '../../core/services/meal-store.service';
 import { Dish } from '../../core/models/dish.model';
 import { MealSchedule, MealType } from '../../core/models/meal-schedule.model';
 import { Household } from '../../core/models/household.model';
+import { MealAssignDialogComponent } from '../dashboard/components/meal-assign-dialog.component';
 
 export interface DayColumn {
   dateStr: string;
@@ -17,28 +23,25 @@ export interface DayColumn {
 @Component({
   selector: 'app-planner',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    HlmButton,
+    HlmBadge,
+    HlmCardImports,
+    HlmSelectImports
+  ],
   templateUrl: './planner.html',
   styleUrl: './planner.scss'
 })
 export class PlannerComponent {
   public store = inject(MealStoreService);
+  private dialogService = inject(HlmDialogService);
 
   public weekOffset = signal<number>(0);
-  public isModalOpen = signal<boolean>(false);
-  public modalDate = signal<string>('');
-  public modalMealType = signal<MealType>('lunch');
-  public modalHouseholdId = signal<string>('');
-  public modalDishId = signal<string>('');
-  public modalHeadcount = signal<number>(3);
 
   public dishes = this.store.dishes;
   public activeHouseholds = this.store.activeHouseholds;
   public selectedHouseholdId = this.store.selectedHouseholdId;
-
-  public modalHousehold = computed(() => {
-    return this.store.householdsMap().get(this.modalHouseholdId()) || null;
-  });
 
   public weekDays = computed<DayColumn[]>(() => {
     const offset = this.weekOffset() * 7;
@@ -83,6 +86,10 @@ export class PlannerComponent {
     this.store.setSelectedHousehold(val ? val : null);
   }
 
+  public setPlannerHouseholdValue(householdId: string | null | undefined): void {
+    this.store.setSelectedHousehold(householdId ? householdId : null);
+  }
+
   public openSlotModal(
     dateStr: string,
     mealType: MealType,
@@ -93,37 +100,16 @@ export class PlannerComponent {
     const targetHhId = this.store.resolveTargetHouseholdId(currentHouseholdId);
     const hh = this.store.householdsMap().get(targetHhId);
 
-    this.modalDate.set(dateStr);
-    this.modalMealType.set(mealType);
-    this.modalHouseholdId.set(targetHhId);
-    this.modalDishId.set(currentDishId || (this.dishes()[0]?.id || ''));
-    this.modalHeadcount.set(currentHeadcount !== undefined ? currentHeadcount : (hh?.default_headcount || 3));
-    this.isModalOpen.set(true);
-  }
-
-  public onModalHouseholdChange(householdId: string): void {
-    this.modalHouseholdId.set(householdId);
-    const hh = this.store.householdsMap().get(householdId);
-    if (hh) {
-      this.modalHeadcount.set(hh.default_headcount || 2);
-    }
-  }
-
-  public closeModal(): void {
-    this.isModalOpen.set(false);
-  }
-
-  public async saveSchedule(): Promise<void> {
-    if (!this.modalDishId() || !this.modalHouseholdId()) return;
-
-    await this.store.setMealSchedule(
-      this.modalDate(),
-      this.modalMealType(),
-      this.modalDishId(),
-      this.modalHeadcount(),
-      this.modalHouseholdId()
-    );
-    this.closeModal();
+    this.dialogService.open(MealAssignDialogComponent, {
+      context: {
+        dateStr,
+        mealType,
+        householdId: targetHhId,
+        dishId: currentDishId || (this.dishes()[0]?.id || ''),
+        headcount: currentHeadcount !== undefined ? currentHeadcount : (hh?.default_headcount || 3)
+      },
+      contentClass: 'sm:max-w-md bg-card border border-border text-card-foreground shadow-2xl rounded-2xl p-6'
+    });
   }
 
   public async adjustSlotHeadcount(

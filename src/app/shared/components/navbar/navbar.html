@@ -52,162 +52,24 @@
           </div>
         }
       } @else {
-        <div class="household-select-wrapper">
-          <span class="household-label">Household:</span>
-          <select 
-            class="household-select" 
-            [value]="selectedHouseholdId() || ''" 
-            (change)="onSelectHousehold($event)">
-            @for (hh of authorizedHouseholds(); track hh.id) {
-              <option [value]="hh.id">
-                {{ hh.name }}
-              </option>
-            }
-          </select>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden sm:inline">Household:</span>
+          <hlm-select [value]="selectedHouseholdId() || ''" (valueChange)="onSelectHouseholdValue($event)">
+            <hlm-select-trigger class="w-48 sm:w-56 h-8 bg-input border-border text-xs">
+              <hlm-select-value placeholder="Select Household..." />
+            </hlm-select-trigger>
+            <hlm-select-content class="bg-popover border-border">
+              @for (hh of authorizedHouseholds(); track hh.id) {
+                <hlm-select-item [value]="hh.id">
+                  {{ hh.name }}
+                </hlm-select-item>
+              }
+            </hlm-select-content>
+          </hlm-select>
         </div>
       }
     </div>
   </div>
-
-  <!-- Household Management Modal -->
-  @if (isManageModalOpen() && canManageHouseholds()) {
-    <div class="modal-backdrop" (click)="closeManageModal()">
-      <div class="modal-dialog hh-dialog" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <div class="modal-title-area">
-            <h3>Manage Households</h3>
-            <p class="modal-subtext">Add or edit clients, default headcount, and dietary constraints.</p>
-          </div>
-          <button (click)="closeManageModal()" class="btn btn-ghost btn-sm">&times;</button>
-        </div>
-
-        <div class="modal-body">
-          <!-- List of Households -->
-          <div class="hh-list">
-            @for (hh of households(); track hh.id) {
-              <div class="hh-card" [class.inactive]="!hh.is_active">
-                <div class="hh-card-header">
-                  <div class="hh-badge-pill" [style.background-color]="hh.color_tag || '#6366f1'">
-                    {{ hh.code || 'HH' }}
-                  </div>
-                  <div class="hh-info">
-                    <span class="hh-name">{{ hh.name }}</span>
-                    @if (hh.contact_name) {
-                      <span class="hh-contact">Contact: {{ hh.contact_name }}</span>
-                    }
-                  </div>
-                  <div class="hh-actions">
-                    <span class="hh-headcount-badge">{{ hh.default_headcount }} portions</span>
-                    <button 
-                      (click)="toggleActive(hh.id)" 
-                      class="btn-toggle" 
-                      [class.btn-toggle-active]="hh.is_active"
-                      title="Toggle active status">
-                      {{ hh.is_active ? 'Active' : 'Inactive' }}
-                    </button>
-                    <button 
-                      (click)="confirmDelete(hh.id, hh.name)" 
-                      class="btn-delete-mini" 
-                      title="Delete household profile">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-
-                @if (hh.dietary_notes) {
-                  <div class="hh-dietary">
-                    <span class="dietary-icon">🥗</span>
-                    <span>{{ hh.dietary_notes }}</span>
-                  </div>
-                }
-              </div>
-            }
-          </div>
-
-          <!-- Add Household Form Toggle -->
-          @if (!isCreateFormVisible()) {
-            <button (click)="isCreateFormVisible.set(true)" class="btn btn-secondary btn-block mt-3">
-              + Add New Household
-            </button>
-          } @else {
-            <div class="hh-create-form mt-3">
-              <h4 class="form-title">Add New Household Profile</h4>
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>Household Name *</label>
-                  <input 
-                    type="text" 
-                    [value]="newName()" 
-                    (input)="newName.set($any($event.target).value)" 
-                    placeholder="e.g. Mehta Family or Flat 301" 
-                    class="form-control" />
-                </div>
-                <div class="form-group">
-                  <label>Short Code</label>
-                  <input 
-                    type="text" 
-                    [value]="newCode()" 
-                    (input)="newCode.set($any($event.target).value)" 
-                    placeholder="e.g. HH-04" 
-                    class="form-control" />
-                </div>
-                <div class="form-group">
-                  <label>Contact Name</label>
-                  <input 
-                    type="text" 
-                    [value]="newContactName()" 
-                    (input)="newContactName.set($any($event.target).value)" 
-                    placeholder="e.g. Rahul Mehta" 
-                    class="form-control" />
-                </div>
-                <div class="form-group">
-                  <label>Default Headcount</label>
-                  <input 
-                    type="number" 
-                    [value]="newHeadcount()" 
-                    (input)="newHeadcount.set(+$any($event.target).value)" 
-                    min="1" 
-                    class="form-control" />
-                </div>
-                <div class="form-group full-width">
-                  <label>Dietary Restrictions / Notes</label>
-                  <input 
-                    type="text" 
-                    [value]="newDietaryNotes()" 
-                    (input)="newDietaryNotes.set($any($event.target).value)" 
-                    placeholder="e.g. Jain (no garlic/onion), Gluten-free, Low spice" 
-                    class="form-control" />
-                </div>
-                <div class="form-group">
-                  <label>Theme Color Tag</label>
-                  <div class="color-picker-row">
-                    <input 
-                      type="color" 
-                      [value]="newColorTag()" 
-                      (input)="newColorTag.set($any($event.target).value)" 
-                      class="color-input" />
-                    <span class="color-preview" [style.background-color]="newColorTag()"></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-buttons mt-2">
-                <button (click)="isCreateFormVisible.set(false)" class="btn btn-secondary btn-sm">Cancel</button>
-                <button (click)="saveNewHousehold()" class="btn btn-primary btn-sm" [disabled]="!newName().trim()">Save Household</button>
-              </div>
-            </div>
-          }
-        </div>
-
-        <div class="modal-footer">
-          <button (click)="closeManageModal()" class="btn btn-secondary">Close</button>
-        </div>
-      </div>
-    </div>
-  }
 
   <!-- Left Side Slide-out Hamburger Menu Drawer -->
   @if (isSidebarOpen()) {
@@ -260,15 +122,17 @@
         }
       } @else {
         <div class="drawer-hh-select-box">
-          <select 
-            class="form-control form-control-sm" 
-            [value]="selectedHouseholdId() || ''" 
-            (change)="onSelectHousehold($event)">
-            <option value="">🏠 All Authorized</option>
-            @for (hh of authorizedHouseholds(); track hh.id) {
-              <option [value]="hh.id">{{ hh.name }} ({{ hh.default_headcount }}p)</option>
-            }
-          </select>
+          <hlm-select [value]="selectedHouseholdId() || ''" (valueChange)="onSelectHouseholdValue($event)">
+            <hlm-select-trigger class="w-full h-8 bg-input border-border text-xs">
+              <hlm-select-value placeholder="All Authorized" />
+            </hlm-select-trigger>
+            <hlm-select-content class="bg-popover border-border">
+              <hlm-select-item value="">🏠 All Authorized</hlm-select-item>
+              @for (hh of authorizedHouseholds(); track hh.id) {
+                <hlm-select-item [value]="hh.id">{{ hh.name }} ({{ hh.default_headcount }}p)</hlm-select-item>
+              }
+            </hlm-select-content>
+          </hlm-select>
         </div>
       }
     </div>
@@ -288,7 +152,7 @@
           </div>
           <div class="nav-label-group">
             <span class="nav-title">Dashboard</span>
-            <span class="nav-desc">Daily meal slots & prep summary</span>
+            <span class="nav-desc">Daily meal slots &amp; prep summary</span>
           </div>
         </a>
 
@@ -303,7 +167,7 @@
           </div>
           <div class="nav-label-group">
             <span class="nav-title">Meal Planner</span>
-            <span class="nav-desc">7-day schedule & household portions</span>
+            <span class="nav-desc">7-day schedule &amp; household portions</span>
           </div>
         </a>
 
@@ -318,8 +182,8 @@
             </svg>
           </div>
           <div class="nav-label-group">
-            <span class="nav-title">Dishes & Recipes</span>
-            <span class="nav-desc">Master recipes & portion ratios</span>
+            <span class="nav-title">Dishes &amp; Recipes</span>
+            <span class="nav-desc">Master recipes &amp; portion ratios</span>
           </div>
         </a>
 
@@ -333,10 +197,10 @@
           </div>
           <div class="nav-label-group">
             <span class="nav-title">Pantry Inventory</span>
-            <span class="nav-desc">Stock levels & restocking alerts</span>
+            <span class="nav-desc">Stock levels &amp; restocking alerts</span>
           </div>
           @if (lowStockCount > 0) {
-            <span class="stock-pill">{{ lowStockCount }}</span>
+            <span hlmBadge class="badge-rose ml-auto text-xs font-bold">{{ lowStockCount }}</span>
           }
         </a>
 
@@ -364,8 +228,8 @@
             </svg>
           </div>
           <div class="nav-label-group">
-            <span class="nav-title">Households & Members</span>
-            <span class="nav-desc">Profiles, dietary notes & member invites</span>
+            <span class="nav-title">Households &amp; Members</span>
+            <span class="nav-desc">Profiles, dietary notes &amp; member invites</span>
           </div>
         </a>
       </nav>
@@ -376,17 +240,17 @@
       @if (currentUser(); as user) {
         <div class="drawer-user-card">
           <a routerLink="/profile" (click)="closeSidebar()" class="drawer-user-link" title="Edit your profile">
-            <div class="drawer-user-avatar">
+            <hlm-avatar size="default" class="border border-border">
               @if (user.avatar_url; as av) {
                 @if (av.startsWith('http://') || av.startsWith('https://')) {
-                  <img [src]="av" alt="Avatar" class="drawer-avatar-img" />
+                  <img [src]="av" alt="Avatar" hlmAvatarImage />
                 } @else {
-                  <span class="drawer-avatar-emoji">{{ av }}</span>
+                  <span hlmAvatarFallback class="text-sm">{{ av }}</span>
                 }
               } @else {
-                <span>{{ user.username.charAt(0).toUpperCase() }}</span>
+                <span hlmAvatarFallback class="font-bold text-xs">{{ user.username.charAt(0).toUpperCase() }}</span>
               }
-            </div>
+            </hlm-avatar>
             <div class="drawer-user-info">
               <span class="drawer-user-name">{{ user.fullName || user.username }}</span>
               <span class="drawer-user-role">{{ user.role }} • Edit Profile</span>

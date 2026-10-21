@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { HlmToasterImports } from '@spartan-ng/helm/sonner';
 import { NavbarComponent } from './shared/components/navbar/navbar';
 import { AuthService } from './core/services/auth.service';
 import { MealStoreService } from './core/services/meal-store.service';
@@ -8,7 +9,7 @@ import { MealStoreService } from './core/services/meal-store.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent],
+  imports: [CommonModule, RouterOutlet, NavbarComponent, HlmToasterImports],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

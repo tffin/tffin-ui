@@ -8,33 +8,35 @@
 
     <!-- Planner Controls -->
     <div class="planner-action-bar">
-      <!-- Quick Household Filter -->
+      <!-- Quick Household Filter with Spartan Select -->
       @if (activeHouseholds().length > 1) {
-        <div class="filter-pill-group">
-          <label class="filter-label">Viewing:</label>
-          <select 
-            class="form-control select-compact"
-            [value]="selectedHouseholdId() || ''" 
-            (change)="setPlannerHousehold($event)">
-            <option value="">All Authorized (Overview)</option>
-            @for (hh of activeHouseholds(); track hh.id) {
-              <option [value]="hh.id">{{ hh.name }} ({{ hh.default_headcount }}p)</option>
-            }
-          </select>
+        <div class="filter-pill-group flex items-center gap-2">
+          <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Viewing:</span>
+          <hlm-select [value]="selectedHouseholdId() || ''" (valueChange)="setPlannerHouseholdValue($event)">
+            <hlm-select-trigger class="w-56 h-8 text-xs bg-input border-border text-foreground">
+              <hlm-select-value placeholder="All Authorized (Overview)" />
+            </hlm-select-trigger>
+            <hlm-select-content class="bg-popover border-border">
+              <hlm-select-item value="">All Authorized (Overview)</hlm-select-item>
+              @for (hh of activeHouseholds(); track hh.id) {
+                <hlm-select-item [value]="hh.id">{{ hh.name }} ({{ hh.default_headcount }}p)</hlm-select-item>
+              }
+            </hlm-select-content>
+          </hlm-select>
         </div>
       }
 
       <!-- Week Navigation Controls -->
-      <div class="nav-controls">
-        <button (click)="resetToToday()" class="btn btn-secondary btn-sm">Current Week</button>
-        <div class="week-buttons">
-          <button (click)="prevWeek()" class="btn btn-secondary btn-icon" title="Previous 7 Days">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+      <div class="nav-controls flex items-center gap-2">
+        <button (click)="resetToToday()" hlmBtn variant="secondary" size="sm">Current Week</button>
+        <div class="week-buttons flex items-center gap-1">
+          <button (click)="prevWeek()" hlmBtn variant="secondary" size="icon-sm" title="Previous 7 Days">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
           </button>
-          <button (click)="nextWeek()" class="btn btn-secondary btn-icon" title="Next 7 Days">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <button (click)="nextWeek()" hlmBtn variant="secondary" size="icon-sm" title="Next 7 Days">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
           </button>
@@ -46,7 +48,7 @@
   <!-- Weekly 7-Day Grid -->
   <div class="calendar-grid">
     @for (day of weekDays(); track day.dateStr) {
-      <div class="day-column" [class.is-today]="day.isToday">
+      <div hlmCard class="day-column" [class.is-today]="day.isToday">
         <!-- Day Header -->
         <div class="day-header">
           <div class="day-info">
@@ -54,11 +56,11 @@
             <span class="day-number">{{ day.dayNumber }}</span>
           </div>
           @if (day.isToday) {
-            <span class="today-pill">Today</span>
+            <span hlmBadge class="today-pill">Today</span>
           }
-          <div class="day-headcount-badge" title="Total Portions Expected Across Households">
+          <span hlmBadge variant="outline" class="day-headcount-badge" title="Total Portions Expected Across Households">
             {{ day.totalDayHeadcount }} pers.
-          </div>
+          </span>
         </div>
 
         <!-- Meals in Day -->
@@ -67,6 +69,7 @@
             <!-- SINGLE HOUSEHOLD VIEW -->
             @if (selectedHouseholdId()) {
               <div 
+                hlmCard
                 class="meal-slot" 
                 [class.has-dish]="!!m.dish" 
                 [class.empty-slot]="!m.dish"
@@ -76,9 +79,9 @@
                   <span class="slot-type" [class]="m.mealType">{{ m.mealType }}</span>
                   @if (m.schedule) {
                     <div class="slot-headcount" (click)="$event.stopPropagation()">
-                      <button (click)="adjustSlotHeadcount(day.dateStr, m.mealType, -1, m.schedule.household_id, $event)" class="btn-micro">-</button>
+                      <button (click)="adjustSlotHeadcount(day.dateStr, m.mealType, -1, m.schedule.household_id, $event)" hlmBtn variant="outline" size="icon-xs">-</button>
                       <span>{{ m.schedule.headcount }}</span>
-                      <button (click)="adjustSlotHeadcount(day.dateStr, m.mealType, 1, m.schedule.household_id, $event)" class="btn-micro">+</button>
+                      <button (click)="adjustSlotHeadcount(day.dateStr, m.mealType, 1, m.schedule.household_id, $event)" hlmBtn variant="outline" size="icon-xs">+</button>
                     </div>
                   }
                 </div>
@@ -106,7 +109,7 @@
               </div>
             } @else {
               <!-- ALL HOUSEHOLDS CONSOLIDATED VIEW -->
-              <div class="meal-slot multi-hh-slot">
+              <div hlmCard class="meal-slot multi-hh-slot">
                 <div class="slot-header">
                   <span class="slot-type" [class]="m.mealType">{{ m.mealType }}</span>
                   <span class="slot-total-badge">{{ m.totalHeadcount }} pers total</span>
@@ -133,9 +136,9 @@
                             {{ plan.stockStatus?.isFullyStocked ? '✓ Stocked' : '⚠ Missing' }}
                           </div>
                           <div class="slot-headcount micro" (click)="$event.stopPropagation()">
-                            <button (click)="adjustSlotHeadcount(day.dateStr, m.mealType, -1, plan.schedule.household_id, $event)" class="btn-micro">-</button>
+                            <button (click)="adjustSlotHeadcount(day.dateStr, m.mealType, -1, plan.schedule.household_id, $event)" hlmBtn variant="outline" size="icon-xs">-</button>
                             <span>{{ plan.schedule.headcount }}</span>
-                            <button (click)="adjustSlotHeadcount(day.dateStr, m.mealType, 1, plan.schedule.household_id, $event)" class="btn-micro">+</button>
+                            <button (click)="adjustSlotHeadcount(day.dateStr, m.mealType, 1, plan.schedule.household_id, $event)" hlmBtn variant="outline" size="icon-xs">+</button>
                           </div>
                         </div>
                       </div>
@@ -155,68 +158,4 @@
       </div>
     }
   </div>
-
-  <!-- Plan/Edit Modal -->
-  @if (isModalOpen()) {
-    <div class="modal-backdrop" (click)="closeModal()">
-      <div class="modal-dialog" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <div>
-            <h3>Plan {{ modalMealType() | titlecase }}</h3>
-            <p class="modal-subtitle">{{ modalDate() }}</p>
-          </div>
-          <button (click)="closeModal()" class="btn btn-ghost btn-sm">&times;</button>
-        </div>
-        <div class="modal-body">
-          <!-- Household Selector -->
-          <div class="form-group">
-            <label>Target Household / Client *</label>
-            <select 
-              [value]="modalHouseholdId()" 
-              (change)="onModalHouseholdChange($any($event.target).value)" 
-              class="form-control">
-              @for (hh of activeHouseholds(); track hh.id) {
-                <option [value]="hh.id">
-                  {{ hh.name }} ({{ hh.code || 'HH' }}) - {{ hh.default_headcount }} pers.
-                </option>
-              }
-            </select>
-          </div>
-
-          <!-- Dietary Constraints Alert -->
-          @if (modalHousehold()?.dietary_notes) {
-            <div class="dietary-alert-box">
-              <span class="alert-icon">⚠️</span>
-              <div class="alert-text">
-                <strong>Dietary Notes:</strong> {{ modalHousehold()?.dietary_notes }}
-              </div>
-            </div>
-          }
-
-          <div class="form-group">
-            <label>Select Dish</label>
-            <select [value]="modalDishId()" (change)="modalDishId.set($any($event.target).value)" class="form-control">
-              @for (d of dishes(); track d.id) {
-                <option [value]="d.id">{{ d.name }}</option>
-              }
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Portions / Headcount</label>
-            <input 
-              type="number" 
-              [value]="modalHeadcount()" 
-              (input)="modalHeadcount.set(+$any($event.target).value)" 
-              min="1" 
-              class="form-control" />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button (click)="closeModal()" class="btn btn-secondary">Cancel</button>
-          <button (click)="saveSchedule()" class="btn btn-primary">Save to Schedule</button>
-        </div>
-      </div>
-    </div>
-  }
 </div>

@@ -1,5 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { LumberjackService } from '@ngworker/lumberjack';
+import { toast } from '@spartan-ng/brain/sonner';
 
 export interface AppNotification {
   message: string;
@@ -19,10 +20,19 @@ export class NotificationService {
       clearTimeout(this.timeoutId);
     }
 
-    if (type === 'error') {
-      this.lumberjack.logWarning(`Displaying error notification: "${message}"`, undefined, 'NotificationService');
-    } else {
-      this.lumberjack.logInfo(`Displaying ${type} notification: "${message}"`, undefined, 'NotificationService');
+    try {
+      if (type === 'error') {
+        this.lumberjack.logWarning(`Displaying error notification: "${message}"`, undefined, 'NotificationService');
+        toast.error(message, { duration: durationMs });
+      } else if (type === 'success') {
+        this.lumberjack.logInfo(`Displaying success notification: "${message}"`, undefined, 'NotificationService');
+        toast.success(message, { duration: durationMs });
+      } else {
+        this.lumberjack.logInfo(`Displaying info notification: "${message}"`, undefined, 'NotificationService');
+        toast.info(message, { duration: durationMs });
+      }
+    } catch {
+      // In non-browser environments or tests without sonner context
     }
 
     this.notification.set({ message, type });

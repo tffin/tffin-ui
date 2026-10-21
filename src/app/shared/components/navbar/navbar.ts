@@ -3,6 +3,10 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmBadge } from '@spartan-ng/helm/badge';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
+import { HlmAvatarImports } from '@spartan-ng/helm/avatar';
 import { HouseholdService } from '../../../core/services/household.service';
 import { MealStoreService } from '../../../core/services/meal-store.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -11,7 +15,15 @@ import { Household } from '../../../core/models/household.model';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, RouterLinkActive],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    RouterLinkActive,
+    HlmBadge,
+    HlmSelectImports,
+    HlmAvatarImports
+  ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
@@ -80,6 +92,10 @@ export class NavbarComponent {
 
   get lowStockCount(): number {
     return this.store.lowStockCount();
+  }
+
+  public onSelectHouseholdValue(val: string | null | undefined): void {
+    this.householdService.setSelectedHousehold(val ? val : null);
   }
 
   public onSelectHousehold(event: Event): void {

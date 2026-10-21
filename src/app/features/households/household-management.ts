@@ -2,15 +2,37 @@ import { Component, computed, effect, inject, OnInit, signal, untracked } from '
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmBadge } from '@spartan-ng/helm/badge';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmDialogService } from '@spartan-ng/helm/dialog';
 import { HouseholdService } from '../../core/services/household.service';
 import { MealStoreService } from '../../core/services/meal-store.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Household, HouseholdMember, HouseholdInvitation, HouseholdMemberRole } from '../../core/models/household.model';
+import { HouseholdCreateDialogComponent } from './components/household-create-dialog.component';
+import { HouseholdEditDialogComponent } from './components/household-edit-dialog.component';
+import { HouseholdJoinDialogComponent } from './components/household-join-dialog.component';
+import { HouseholdInviteDialogComponent } from './components/household-invite-dialog.component';
+import { HouseholdDeleteDialogComponent } from './components/household-delete-dialog.component';
 
 @Component({
   selector: 'app-household-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    HlmButton,
+    HlmBadge,
+    HlmCardImports,
+    HlmBreadcrumbImports,
+    HlmSelectImports,
+    HlmInput
+  ],
   templateUrl: './household-management.html',
   styleUrl: './household-management.scss'
 })
@@ -20,6 +42,7 @@ export class HouseholdManagementComponent implements OnInit {
   public auth = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  protected readonly dialogService = inject(HlmDialogService, { optional: true });
 
   public currentUser = this.auth.currentUser;
   public activeHouseholds = this.householdService.activeHouseholds;
@@ -169,7 +192,7 @@ export class HouseholdManagementComponent implements OnInit {
     const joinCode = this.route.snapshot.queryParams['join'];
     if (joinCode) {
       this.joinCodeInput.set(joinCode);
-      this.isJoinModalOpen.set(true);
+      this.openJoinModal();
     }
   }
 
@@ -180,6 +203,12 @@ export class HouseholdManagementComponent implements OnInit {
     this.householdService.loadHouseholdInvitations(id);
   }
 
+  public onInviteRoleChange(role: string | null | undefined): void {
+    if (role) {
+      this.inviteRole.set(role as HouseholdMemberRole);
+    }
+  }
+
   // Invite Management
   public openInviteModal(): void {
     this.inviteRole.set('member');
@@ -188,6 +217,18 @@ export class HouseholdManagementComponent implements OnInit {
     this.generatedInvite.set(null);
     this.copiedInviteLink.set(false);
     this.isInviteModalOpen.set(true);
+
+    const hh = this.currentHousehold();
+    if (this.dialogService && hh) {
+      const ref = this.dialogService.open(HouseholdInviteDialogComponent, {
+        contentClass: 'sm:max-w-md bg-card text-card-foreground border-border',
+        context: { household: hh }
+      });
+      ref.closed$.subscribe(() => {
+        this.isInviteModalOpen.set(false);
+        this.householdService.loadHouseholdInvitations(hh.id);
+      });
+    }
   }
 
   public closeInviteModal(): void {
@@ -247,9 +288,23 @@ export class HouseholdManagementComponent implements OnInit {
 
   // Join Modal
   public openJoinModal(): void {
-    this.joinCodeInput.set('');
+    const currentCode = this.joinCodeInput();
     this.joinError.set(null);
     this.isJoinModalOpen.set(true);
+
+    if (this.dialogService) {
+      const ref = this.dialogService.open(HouseholdJoinDialogComponent, {
+        contentClass: 'sm:max-w-md bg-card text-card-foreground border-border',
+        context: { initialCode: currentCode }
+      });
+      ref.closed$.subscribe((res: any) => {
+        this.isJoinModalOpen.set(false);
+        if (res?.success && res?.householdId) {
+          this.selectHousehold(res.householdId);
+          this.router.navigate([], { queryParams: {} });
+        }
+      });
+    }
   }
 
   public closeJoinModal(): void {
@@ -273,7 +328,6 @@ export class HouseholdManagementComponent implements OnInit {
     if (res.success && res.household_id) {
       this.closeJoinModal();
       this.selectHousehold(res.household_id);
-      // Remove query param from URL
       this.router.navigate([], { queryParams: {} });
     } else {
       this.joinError.set(res.message);
@@ -294,6 +348,19 @@ export class HouseholdManagementComponent implements OnInit {
     this.editDietaryNotes.set(hh.dietary_notes || '');
     this.editColorTag.set(hh.color_tag || '#6366f1');
     this.isEditModalOpen.set(true);
+
+    if (this.dialogService) {
+      const ref = this.dialogService.open(HouseholdEditDialogComponent, {
+        contentClass: 'sm:max-w-lg bg-card text-card-foreground border-border',
+        context: { household: hh }
+      });
+      ref.closed$.subscribe((res: any) => {
+        this.isEditModalOpen.set(false);
+        if (res?.action === 'delete') {
+          this.openDeleteModal();
+        }
+      });
+    }
   }
 
   public closeEditModal(): void {
@@ -333,6 +400,18 @@ export class HouseholdManagementComponent implements OnInit {
     this.createDietaryNotes.set('');
     this.createColorTag.set('#6366f1');
     this.isCreateModalOpen.set(true);
+
+    if (this.dialogService) {
+      const ref = this.dialogService.open(HouseholdCreateDialogComponent, {
+        contentClass: 'sm:max-w-lg bg-card text-card-foreground border-border'
+      });
+      ref.closed$.subscribe((created: any) => {
+        this.isCreateModalOpen.set(false);
+        if (created?.id) {
+          this.selectHousehold(created.id);
+        }
+      });
+    }
   }
 
   public closeCreateModal(): void {
@@ -369,6 +448,26 @@ export class HouseholdManagementComponent implements OnInit {
   // Delete Household
   public openDeleteModal(): void {
     this.isDeleteModalOpen.set(true);
+
+    const hh = this.currentHousehold();
+    if (this.dialogService && hh) {
+      const ref = this.dialogService.open(HouseholdDeleteDialogComponent, {
+        contentClass: 'sm:max-w-md bg-card text-card-foreground border-border',
+        context: { household: hh }
+      });
+      ref.closed$.subscribe((success: any) => {
+        this.isDeleteModalOpen.set(false);
+        if (success) {
+          const remaining = this.activeHouseholds().filter(h => h.id !== hh.id);
+          if (remaining.length > 0) {
+            this.selectHousehold(remaining[0].id);
+          } else {
+            this.selectedHouseholdId.set('');
+            this.router.navigate(['/dashboard']);
+          }
+        }
+      });
+    }
   }
 
   public closeDeleteModal(): void {

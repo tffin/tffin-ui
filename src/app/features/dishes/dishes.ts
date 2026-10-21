@@ -1,32 +1,33 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmBadge } from '@spartan-ng/helm/badge';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmDialogService } from '@spartan-ng/helm/dialog';
 import { MealStoreService } from '../../core/services/meal-store.service';
 import { Dish } from '../../core/models/dish.model';
-
-interface RecipeIngredientRow {
-  ingredient_id: string;
-  qty_per_person: number;
-}
+import { DishCreateDialogComponent } from './components/dish-create-dialog.component';
 
 @Component({
   selector: 'app-dishes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    HlmButton,
+    HlmInput,
+    HlmBadge,
+    HlmCardImports
+  ],
   templateUrl: './dishes.html',
   styleUrl: './dishes.scss'
 })
 export class DishesComponent {
   public store = inject(MealStoreService);
+  private dialogService = inject(HlmDialogService);
 
   public searchQuery = signal<string>('');
   public portionMultiplier = signal<number>(3); // 1, 3, 5 people portion preview
-
-  // Modal State
-  public isCreateModalOpen = signal<boolean>(false);
-  public newDishName = signal<string>('');
-  public newCookNotes = signal<string>('');
-  public newIngredients = signal<RecipeIngredientRow[]>([]);
 
   public dishes = this.store.dishes;
   public masterIngredients = this.store.ingredients;
@@ -42,41 +43,9 @@ export class DishesComponent {
   });
 
   public openCreateModal(): void {
-    this.newDishName.set('');
-    this.newCookNotes.set('');
-    const firstIng = this.masterIngredients()[0]?.id || '';
-    this.newIngredients.set([
-      { ingredient_id: firstIng, qty_per_person: 50 }
-    ]);
-    this.isCreateModalOpen.set(true);
-  }
-
-  public closeCreateModal(): void {
-    this.isCreateModalOpen.set(false);
-  }
-
-  public addIngredientRow(): void {
-    const firstIng = this.masterIngredients()[0]?.id || '';
-    this.newIngredients.update(rows => [
-      ...rows,
-      { ingredient_id: firstIng, qty_per_person: 50 }
-    ]);
-  }
-
-  public removeIngredientRow(index: number): void {
-    this.newIngredients.update(rows => rows.filter((_, i) => i !== index));
-  }
-
-  public async saveDish(): Promise<void> {
-    const name = this.newDishName().trim();
-    if (!name) return;
-
-    const validIngredients = this.newIngredients().filter(
-      r => r.ingredient_id && r.qty_per_person > 0
-    );
-
-    await this.store.createDish(name, this.newCookNotes(), validIngredients);
-    this.closeCreateModal();
+    this.dialogService.open(DishCreateDialogComponent, {
+      contentClass: 'sm:max-w-xl bg-card border border-border text-card-foreground shadow-2xl rounded-2xl p-6'
+    });
   }
 
   public async deleteDish(dishId: string): Promise<void> {

@@ -2,13 +2,26 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmLabel } from '@spartan-ng/helm/label';
+import { HlmAlertImports } from '@spartan-ng/helm/alert';
+import { HlmCheckbox } from '@spartan-ng/helm/checkbox';
 import { AuthService } from '../../core/services/auth.service';
 import { SupabaseService } from '../../core/services/supabase.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    HlmButton,
+    HlmInput,
+    HlmLabel,
+    HlmAlertImports,
+    HlmCheckbox
+  ],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })

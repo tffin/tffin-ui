@@ -2,11 +2,11 @@
   <!-- Page Header -->
   <div class="page-header">
     <div>
-      <h1 class="page-title">Pantry Inventory & Thresholds</h1>
+      <h1 class="page-title">Pantry Inventory &amp; Thresholds</h1>
       <p class="page-desc">Track real-time pantry weights, units, and configure automatic low-stock replenishment warnings.</p>
     </div>
 
-    <button (click)="openCreateModal()" class="btn btn-primary">
+    <button hlmBtn (click)="openCreateModal()" class="gap-2">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
         <line x1="12" y1="5" x2="12" y2="19"></line>
         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -17,12 +17,14 @@
 
   <!-- Filter Controls & Category Tabs -->
   <div class="toolbar-section">
-    <div class="category-tabs">
+    <div class="category-tabs flex items-center gap-1 overflow-x-auto">
       @for (cat of categories; track cat) {
         <button 
-          (click)="selectedCategory.set(cat)" 
-          [class.active]="selectedCategory() === cat" 
-          class="tab-btn">
+          hlmBtn 
+          [variant]="selectedCategory() === cat ? 'default' : 'ghost'"
+          size="sm"
+          (click)="selectedCategory.set(cat)"
+          class="font-medium text-xs">
           {{ cat | titlecase }}
         </button>
       }
@@ -35,103 +37,116 @@
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
         <input 
+          hlmInput 
           type="text" 
           [value]="searchQuery()" 
           (input)="searchQuery.set($any($event.target).value)" 
           placeholder="Filter ingredients..." 
-          class="form-control" />
+          class="w-full pl-9 h-9 text-xs" />
       </div>
 
       <button 
+        hlmBtn 
+        [variant]="filterLowStockOnly() ? 'destructive' : 'outline'"
+        size="sm"
         (click)="filterLowStockOnly.set(!filterLowStockOnly())" 
-        [class.active]="filterLowStockOnly()" 
-        class="filter-toggle">
-        <span class="dot-indicator" [class.rose]="filterLowStockOnly()"></span>
-        <span>Low Stock Only ({{ store.lowStockCount() }})</span>
+        class="gap-1.5 whitespace-nowrap text-xs">
+        <span class="w-2 h-2 rounded-full" [class.bg-white]="filterLowStockOnly()" [class.bg-rose-500]="!filterLowStockOnly()"></span>
+        <span>Low Stock ({{ store.lowStockCount() }})</span>
       </button>
     </div>
   </div>
 
-  <!-- Inventory Table -->
-  <div class="card table-card">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Ingredient</th>
-          <th>Category</th>
-          <th>Current On-Hand</th>
-          <th>Min Safety Threshold</th>
-          <th>Stock Ratio</th>
-          <th>Quick Restock</th>
+  <!-- Inventory Table with Spartan Table -->
+  <div hlmTableContainer class="rounded-xl border border-border bg-card shadow-sm overflow-x-auto">
+    <table hlmTable>
+      <thead hlmTHead class="bg-muted/30">
+        <tr hlmTr>
+          <th hlmTh class="font-semibold text-foreground px-4 py-3">Ingredient</th>
+          <th hlmTh class="font-semibold text-foreground px-4 py-3">Category</th>
+          <th hlmTh class="font-semibold text-foreground px-4 py-3">Current On-Hand</th>
+          <th hlmTh class="font-semibold text-foreground px-4 py-3">Min Safety Threshold</th>
+          <th hlmTh class="font-semibold text-foreground px-4 py-3">Stock Ratio</th>
+          <th hlmTh class="font-semibold text-foreground px-4 py-3 text-end">Quick Restock</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody hlmTBody>
+        @if (filteredInventory().length === 0) {
+          <tr hlmTr>
+            <td hlmTd colspan="6" class="text-center py-8 text-muted-foreground">
+              No ingredients found matching the filter.
+            </td>
+          </tr>
+        }
         @for (item of filteredInventory(); track item.id) {
-          <tr [class.warning-row]="item.isLowStock">
+          <tr hlmTr [class.bg-rose-950/20]="item.isLowStock" class="hover:bg-muted/40 transition-colors">
             <!-- Name & Unit -->
-            <td>
-              <div class="ing-cell">
-                <span class="ing-name">{{ item.ingredient?.name }}</span>
-                <span class="unit-badge">{{ item.ingredient?.unit }}</span>
+            <td hlmTd class="px-4 py-3">
+              <div class="flex items-center gap-2">
+                <span class="font-medium text-foreground">{{ item.ingredient?.name }}</span>
+                <span hlmBadge variant="outline" class="text-[10px] uppercase tracking-wider text-muted-foreground">{{ item.ingredient?.unit }}</span>
               </div>
             </td>
 
             <!-- Category -->
-            <td>
-              <span class="badge" [class.badge-emerald]="item.ingredient?.category === 'produce'"
-                                  [class.badge-amber]="item.ingredient?.category === 'dairy'"
-                                  [class.badge-purple]="item.ingredient?.category === 'spices'"
-                                  [class.badge-sky]="item.ingredient?.category === 'staples'">
+            <td hlmTd class="px-4 py-3">
+              <span hlmBadge 
+                [class.badge-emerald]="item.ingredient?.category === 'produce'"
+                [class.badge-amber]="item.ingredient?.category === 'dairy'"
+                [class.badge-purple]="item.ingredient?.category === 'spices'"
+                [class.badge-sky]="item.ingredient?.category === 'staples'"
+                class="font-medium capitalize text-xs">
                 {{ item.ingredient?.category }}
               </span>
             </td>
 
             <!-- Current Quantity (Editable) -->
-            <td>
-              <div class="editable-qty">
+            <td hlmTd class="px-4 py-3">
+              <div class="flex items-center gap-1.5 w-32">
                 <input 
+                  hlmInput 
                   type="number" 
                   [value]="item.quantity" 
                   (change)="onDirectQtyChange(item.ingredient_id, $event)"
-                  class="form-control qty-input" />
-                <span class="unit-text">{{ item.ingredient?.unit }}</span>
+                  class="h-8 w-20 text-xs px-2 font-semibold" />
+                <span class="text-xs text-muted-foreground font-medium">{{ item.ingredient?.unit }}</span>
               </div>
             </td>
 
             <!-- Min Threshold (Editable) -->
-            <td>
-              <div class="editable-qty">
+            <td hlmTd class="px-4 py-3">
+              <div class="flex items-center gap-1.5 w-32">
                 <input 
+                  hlmInput 
                   type="number" 
                   [value]="item.min_threshold" 
                   (change)="onDirectThresholdChange(item.ingredient_id, item.quantity, $event)"
-                  class="form-control qty-input" />
-                <span class="unit-text">{{ item.ingredient?.unit }}</span>
+                  class="h-8 w-20 text-xs px-2 font-semibold" />
+                <span class="text-xs text-muted-foreground font-medium">{{ item.ingredient?.unit }}</span>
               </div>
             </td>
 
             <!-- Stock Level Progress Bar -->
-            <td>
-              <div class="stock-status-cell">
-                <div class="bar-track">
-                  <div 
-                    class="bar-fill" 
-                    [class.low]="item.isLowStock" 
-                    [class.healthy]="!item.isLowStock"
-                    [style.width.%]="item.stockPercentage"></div>
+            <td hlmTd class="px-4 py-3 min-w-[160px]">
+              <div class="space-y-1">
+                <hlm-progress [value]="item.stockPercentage" class="h-2 bg-input">
+                  <hlm-progress-indicator [class.bg-rose-500]="item.isLowStock" [class.bg-emerald-500]="!item.isLowStock" class="rounded-full" />
+                </hlm-progress>
+                <div class="flex justify-between items-center text-[11px]">
+                  <span [class.text-rose-400]="item.isLowStock" [class.text-muted-foreground]="!item.isLowStock" class="font-medium">
+                    {{ item.isLowStock ? 'Low Stock' : 'Optimal' }}
+                  </span>
+                  <span class="text-muted-foreground font-mono">{{ item.stockPercentage }}%</span>
                 </div>
-                <span class="status-label" [class.text-rose]="item.isLowStock">
-                  {{ item.isLowStock ? 'Low Stock' : 'Optimal' }}
-                </span>
               </div>
             </td>
 
             <!-- Quick Delta Actions -->
-            <td>
-              <div class="action-buttons">
-                <button (click)="adjustStock(item.ingredient_id, -50)" class="btn-delta" title="Decrease 50">-50</button>
-                <button (click)="adjustStock(item.ingredient_id, 100)" class="btn-delta" title="Add 100">+100</button>
-                <button (click)="adjustStock(item.ingredient_id, 500)" class="btn-delta highlight" title="Add 500">+500</button>
+            <td hlmTd class="px-4 py-3 text-end">
+              <div class="flex items-center justify-end gap-1.5">
+                <button hlmBtn variant="outline" size="xs" (click)="adjustStock(item.ingredient_id, -50)" title="Decrease 50">-50</button>
+                <button hlmBtn variant="outline" size="xs" (click)="adjustStock(item.ingredient_id, 100)" title="Add 100">+100</button>
+                <button hlmBtn variant="default" size="xs" (click)="adjustStock(item.ingredient_id, 500)" title="Add 500">+500</button>
               </div>
             </td>
           </tr>
@@ -139,79 +154,4 @@
       </tbody>
     </table>
   </div>
-
-  <!-- Add Ingredient Modal -->
-  @if (isModalOpen()) {
-    <div class="modal-backdrop" (click)="closeModal()">
-      <div class="modal-dialog" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <h3>Add New Master Ingredient</h3>
-          <button (click)="closeModal()" class="btn btn-ghost btn-sm">&times;</button>
-        </div>
-
-        <div class="modal-body">
-          <div class="form-group">
-            <label>Ingredient Name *</label>
-            <input 
-              type="text" 
-              [value]="newName()" 
-              (input)="newName.set($any($event.target).value)" 
-              placeholder="e.g. Kashmiri Chilli Powder, Butter" 
-              class="form-control" />
-          </div>
-
-          <div class="grid-2">
-            <div class="form-group">
-              <label>Category</label>
-              <select [value]="newCategory()" (change)="newCategory.set($any($event.target).value)" class="form-control">
-                <option value="produce">Produce (Vegetables, Greens)</option>
-                <option value="dairy">Dairy (Milk, Paneer, Curd)</option>
-                <option value="spices">Spices & Condiments</option>
-                <option value="staples">Staples (Rice, Dal, Flour, Oil)</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Standard Unit</label>
-              <select [value]="newUnit()" (change)="newUnit.set($any($event.target).value)" class="form-control">
-                <option value="g">Grams (g)</option>
-                <option value="kg">Kilograms (kg)</option>
-                <option value="ml">Milliliters (ml)</option>
-                <option value="pcs">Pieces (pcs)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <div class="form-group">
-              <label>Initial Stock Quantity</label>
-              <input 
-                type="number" 
-                [value]="newInitialStock()" 
-                (input)="newInitialStock.set(+$any($event.target).value)" 
-                min="0" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Low Stock Threshold</label>
-              <input 
-                type="number" 
-                [value]="newMinThreshold()" 
-                (input)="newMinThreshold.set(+$any($event.target).value)" 
-                min="0" 
-                class="form-control" />
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button (click)="closeModal()" class="btn btn-secondary">Cancel</button>
-          <button (click)="saveNewIngredient()" class="btn btn-primary" [disabled]="!newName().trim()">
-            Save Ingredient
-          </button>
-        </div>
-      </div>
-    </div>
-  }
 </div>

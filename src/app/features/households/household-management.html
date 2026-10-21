@@ -1,19 +1,25 @@
 <div class="household-page">
   <!-- Page Header -->
-  <header class="page-header">
+  <header class="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
     <div class="header-titles">
-      <div class="breadcrumb">
-        <a routerLink="/dashboard" class="breadcrumb-link">Dashboard</a>
-        <span class="breadcrumb-sep">/</span>
-        <span class="breadcrumb-current">Households</span>
-      </div>
-      <h1 class="page-title">Household & Member Management</h1>
-      <p class="page-desc">Manage family profiles, default headcounts, dietary requirements, and member invitations.</p>
+      <nav hlmBreadcrumb class="mb-2">
+        <ol hlmBreadcrumbList>
+          <li hlmBreadcrumbItem>
+            <a hlmBreadcrumbLink link="/dashboard">Dashboard</a>
+          </li>
+          <li hlmBreadcrumbSeparator></li>
+          <li hlmBreadcrumbItem>
+            <span hlmBreadcrumbPage>Households</span>
+          </li>
+        </ol>
+      </nav>
+      <h1 class="page-title text-2xl font-bold tracking-tight text-foreground">Household &amp; Member Management</h1>
+      <p class="page-desc text-sm text-muted-foreground mt-1">Manage family profiles, default headcounts, dietary requirements, and member invitations.</p>
     </div>
 
-    <div class="header-actions">
+    <div class="header-actions flex flex-wrap items-center gap-2">
       @if (hasNoHouseholds() || canManage()) {
-        <button (click)="openCreateModal()" class="btn btn-primary btn-glow" title="Create a new household">
+        <button hlmBtn (click)="openCreateModal()" class="gap-2" title="Create a new household">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -22,7 +28,7 @@
         </button>
       }
 
-      <button (click)="openJoinModal()" class="btn btn-secondary" title="Join a household using an invite code">
+      <button hlmBtn variant="secondary" (click)="openJoinModal()" class="gap-2" title="Join a household using an invite code">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
           <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
           <polyline points="10 17 15 12 10 7"></polyline>
@@ -32,7 +38,7 @@
       </button>
 
       @if (canManage() && !hasNoHouseholds()) {
-        <button (click)="openInviteModal()" class="btn btn-secondary" title="Invite a new member to this household">
+        <button hlmBtn variant="outline" (click)="openInviteModal()" class="gap-2" title="Invite a new member to this household">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
             <circle cx="9" cy="7" r="4"></circle>
@@ -47,17 +53,19 @@
 
   <!-- Multi-Household Switcher Tabs -->
   @if (activeHouseholds().length > 1) {
-    <div class="hh-tabs-bar">
+    <div class="hh-tabs-bar flex items-center gap-2 overflow-x-auto pb-2 mb-6">
       @for (hh of activeHouseholds(); track hh.id) {
         <button 
+          hlmBtn
+          [variant]="currentHousehold()?.id === hh.id ? 'default' : 'secondary'"
+          size="sm"
           (click)="selectHousehold(hh.id)"
-          class="hh-tab" 
-          [class.active]="currentHousehold()?.id === hh.id">
-          <span class="hh-tab-badge" [style.background-color]="hh.color_tag || '#6366f1'">
+          class="gap-2">
+          <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm" [style.background-color]="hh.color_tag || '#6366f1'">
             {{ hh.code || 'HH' }}
           </span>
-          <span class="hh-tab-name">{{ hh.name }}</span>
-          <span class="hh-tab-portions">{{ hh.default_headcount }} portions</span>
+          <span class="font-semibold">{{ hh.name }}</span>
+          <span class="text-xs opacity-75 font-normal">({{ hh.default_headcount }}p)</span>
         </button>
       }
     </div>
@@ -65,18 +73,18 @@
 
   @if (hasNoHouseholds()) {
     <!-- Empty State Hero Card: User has no household -->
-    <div class="card no-household-hero">
-      <div class="hero-icon-ring">
-        <span class="hero-emoji">🏠</span>
+    <div hlmCard class="no-household-hero p-8 md:p-12 text-center border border-border bg-card">
+      <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center text-4xl">
+        🏠
       </div>
-      <h2 class="hero-title">You're Not Part of Any Household Yet</h2>
-      <p class="hero-subtitle">
+      <h2 class="text-2xl font-bold text-foreground">You're Not Part of Any Household Yet</h2>
+      <p class="text-sm text-muted-foreground mt-2 max-w-lg mx-auto">
         To start scheduling daily meals, tracking portion counts, and managing dietary requirements, 
         you can create a brand new household profile or join an existing family with an invite code.
       </p>
 
-      <div class="hero-action-buttons">
-        <button (click)="openCreateModal()" class="btn btn-primary btn-lg btn-glow">
+      <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
+        <button hlmBtn (click)="openCreateModal()" class="gap-2">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -84,7 +92,7 @@
           <span>Create Your Household</span>
         </button>
 
-        <button (click)="openJoinModal()" class="btn btn-secondary btn-lg">
+        <button hlmBtn variant="secondary" (click)="openJoinModal()" class="gap-2">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
             <polyline points="10 17 15 12 10 7"></polyline>
@@ -94,60 +102,56 @@
         </button>
       </div>
 
-      <div class="hero-perks-grid">
-        <div class="perk-card">
-          <span class="perk-icon">👑</span>
-          <div class="perk-info">
-            <strong>Household Ownership</strong>
-            <p>You become the owner with full management rights to invite family members or chefs.</p>
-          </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10 text-left max-w-4xl mx-auto">
+        <div hlmCard class="p-4 border border-border bg-card/60">
+          <span class="text-2xl block mb-2">👑</span>
+          <strong class="text-foreground text-sm block">Household Ownership</strong>
+          <p class="text-xs text-muted-foreground mt-1">You become the owner with full management rights to invite family members or chefs.</p>
         </div>
-        <div class="perk-card">
-          <span class="perk-icon">🥗</span>
-          <div class="perk-info">
-            <strong>Dietary Guidelines</strong>
-            <p>Specify Jain, vegetarian, gluten-free, or custom notes with default headcounts.</p>
-          </div>
+        <div hlmCard class="p-4 border border-border bg-card/60">
+          <span class="text-2xl block mb-2">🥗</span>
+          <strong class="text-foreground text-sm block">Dietary Guidelines</strong>
+          <p class="text-xs text-muted-foreground mt-1">Specify Jain, vegetarian, gluten-free, or custom notes with default headcounts.</p>
         </div>
-        <div class="perk-card">
-          <span class="perk-icon">📅</span>
-          <div class="perk-info">
-            <strong>Daily Meal Planning</strong>
-            <p>Plan breakfast, lunch, and dinner menus with automated ingredient grocery calculations.</p>
-          </div>
+        <div hlmCard class="p-4 border border-border bg-card/60">
+          <span class="text-2xl block mb-2">📅</span>
+          <strong class="text-foreground text-sm block">Daily Meal Planning</strong>
+          <p class="text-xs text-muted-foreground mt-1">Plan breakfast, lunch, and dinner menus with automated ingredient grocery calculations.</p>
         </div>
       </div>
     </div>
   } @else if (currentHousehold(); as hh) {
     <!-- Main Content Layout Grid -->
-    <div class="hh-grid">
+    <div class="hh-grid grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Left Column: Household Details & Members -->
-      <div class="hh-main-col">
+      <div class="hh-main-col lg:col-span-2 space-y-6">
         <!-- Household Profile Card -->
-        <div class="card hh-profile-card">
-          <div class="profile-card-header">
-            <div class="profile-badge-row">
-              <span class="profile-tag" [style.background-color]="hh.color_tag || '#6366f1'">
+        <div hlmCard class="hh-profile-card p-6 border border-border bg-card">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-border">
+            <div class="flex items-center gap-3">
+              <span class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-white text-base shadow-md" [style.background-color]="hh.color_tag || '#6366f1'">
                 {{ hh.code || 'HH' }}
               </span>
               <div>
-                <h2 class="hh-title">{{ hh.name }}</h2>
-                <span class="hh-status-pill" [class.active]="hh.is_active">
-                  {{ hh.is_active ? 'Active Profile' : 'Inactive' }}
-                </span>
+                <h2 class="text-xl font-bold text-foreground">{{ hh.name }}</h2>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <span hlmBadge [variant]="hh.is_active ? 'default' : 'secondary'" class="text-xs">
+                    {{ hh.is_active ? 'Active Profile' : 'Inactive' }}
+                  </span>
+                </div>
               </div>
             </div>
 
             @if (canManage()) {
-              <div class="profile-actions">
-                <button (click)="openEditModal()" class="btn btn-secondary btn-sm" title="Edit household profile">
+              <div class="flex items-center gap-2">
+                <button hlmBtn variant="outline" size="sm" (click)="openEditModal()" class="gap-1.5" title="Edit household profile">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
                     <path d="M12 20h9"></path>
                     <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                   </svg>
                   <span>Edit Profile</span>
                 </button>
-                <button (click)="openDeleteModal()" class="btn btn-danger btn-sm" title="Delete this household">
+                <button hlmBtn variant="destructive" size="sm" (click)="openDeleteModal()" class="gap-1.5" title="Delete this household">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
                     <polyline points="3 6 5 6 21 6"></polyline>
                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -160,81 +164,86 @@
             }
           </div>
 
-          <div class="profile-details-grid">
-            <div class="detail-item">
-              <span class="detail-label">Default Headcount</span>
-              <span class="detail-value highlight">{{ hh.default_headcount }} persons</span>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 py-4">
+            <div>
+              <span class="text-xs text-muted-foreground block font-medium">Default Headcount</span>
+              <span class="text-lg font-bold text-primary">{{ hh.default_headcount }} persons</span>
             </div>
 
-            <div class="detail-item">
-              <span class="detail-label">Contact Person</span>
-              <span class="detail-value">{{ hh.contact_name || 'Not specified' }}</span>
+            <div>
+              <span class="text-xs text-muted-foreground block font-medium">Contact Person</span>
+              <span class="text-sm font-semibold text-foreground">{{ hh.contact_name || 'Not specified' }}</span>
             </div>
 
-            <div class="detail-item">
-              <span class="detail-label">Phone</span>
-              <span class="detail-value">{{ hh.contact_phone || 'Not specified' }}</span>
+            <div>
+              <span class="text-xs text-muted-foreground block font-medium">Phone</span>
+              <span class="text-sm font-semibold text-foreground">{{ hh.contact_phone || 'Not specified' }}</span>
             </div>
 
-            <div class="detail-item full-width">
-              <span class="detail-label">Delivery Address</span>
-              <span class="detail-value">{{ hh.address || 'Not specified' }}</span>
+            <div class="sm:col-span-3">
+              <span class="text-xs text-muted-foreground block font-medium">Delivery Address</span>
+              <span class="text-sm text-foreground">{{ hh.address || 'Not specified' }}</span>
             </div>
           </div>
 
           <!-- Dietary Restrictions Alert -->
           @if (hh.dietary_notes) {
-            <div class="dietary-box">
-              <div class="dietary-icon">🥗</div>
-              <div class="dietary-content">
-                <span class="dietary-title">Dietary Guidelines & Constraints</span>
-                <p class="dietary-text">{{ hh.dietary_notes }}</p>
+            <div class="mt-2 p-3 rounded-lg border border-amber-500/30 bg-amber-950/20 flex items-start gap-2.5">
+              <span class="text-base">🥗</span>
+              <div>
+                <span class="text-xs font-semibold text-amber-400 block">Dietary Guidelines &amp; Constraints</span>
+                <p class="text-xs text-foreground/90 mt-0.5">{{ hh.dietary_notes }}</p>
               </div>
             </div>
           }
         </div>
 
         <!-- Household Members Card -->
-        <div class="card members-card">
-          <div class="card-header-row">
-            <div class="card-title-group">
-              <h3 class="card-title">Household Members</h3>
-              <span class="count-pill">{{ currentMembers().length }}</span>
+        <div hlmCard class="members-card p-6 border border-border bg-card">
+          <div class="flex items-center justify-between pb-4 border-b border-border">
+            <div class="flex items-center gap-2">
+              <h3 class="text-lg font-bold text-foreground">Household Members</h3>
+              <span hlmBadge variant="secondary" class="text-xs">{{ currentMembers().length }}</span>
             </div>
             @if (canManage()) {
-              <button (click)="openInviteModal()" class="btn btn-ghost btn-sm">
+              <button hlmBtn variant="ghost" size="sm" (click)="openInviteModal()">
                 + Invite New Member
               </button>
             }
           </div>
 
           @if (currentMembers().length === 0) {
-            <div class="empty-state-mini">
+            <div class="text-center py-6 text-sm text-muted-foreground">
               <p>No members found for this household profile.</p>
             </div>
           } @else {
-            <div class="members-list">
+            <div class="divide-y divide-border/60">
               @for (mem of currentMembers(); track mem.id || mem.user_id) {
-                <div class="member-row">
-                  <div class="member-avatar">
-                    <span>{{ (mem.fullName || mem.username || 'M').charAt(0).toUpperCase() }}</span>
-                  </div>
-
-                  <div class="member-info">
-                    <div class="member-name-row">
-                      <span class="member-name">{{ mem.fullName || mem.username }}</span>
-                      <span class="role-badge" [class.role-owner]="mem.role_in_household === 'owner'">
-                        {{ mem.role_in_household }}
-                      </span>
+                <div class="flex items-center justify-between py-3">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center font-bold text-primary text-sm">
+                      {{ (mem.fullName || mem.username || 'M').charAt(0).toUpperCase() }}
                     </div>
-                    <span class="member-username">@{{ mem.username }}</span>
+
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <span class="font-medium text-foreground text-sm">{{ mem.fullName || mem.username }}</span>
+                        <span hlmBadge [variant]="mem.role_in_household === 'owner' ? 'default' : 'outline'" class="text-[10px] capitalize">
+                          {{ mem.role_in_household }}
+                        </span>
+                      </div>
+                      <span class="text-xs text-muted-foreground">@{{ mem.username }}</span>
+                    </div>
                   </div>
 
                   <div class="member-actions">
                     @if (canManage() && mem.user_id !== currentUser()?.id && mem.role_in_household !== 'owner') {
                       <button 
+                        hlmBtn
+                        variant="ghost"
+                        size="icon"
                         (click)="removeMember(mem.user_id, mem.fullName || mem.username || 'Member')" 
-                        class="btn-remove" 
+                        class="text-muted-foreground hover:text-destructive" 
                         title="Remove member from this household">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
                           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -251,50 +260,54 @@
       </div>
 
       <!-- Right Column: Member Invitation Link Card & Pending Invites -->
-      <div class="hh-side-col">
+      <div class="hh-side-col space-y-6">
         <!-- Quick Invite Link Generator Card -->
-        <div class="card invite-hero-card">
-          <div class="invite-hero-header">
-            <div class="invite-icon-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+        <div hlmCard class="invite-hero-card p-6 border border-border bg-card">
+          <div class="flex items-start gap-3 pb-4 border-b border-border">
+            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
                 <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
               </svg>
             </div>
             <div>
-              <h3 class="hero-title">Invite New Members</h3>
-              <p class="hero-desc">Generate an invitation link or code to share with family members or kitchen staff.</p>
+              <h3 class="font-bold text-foreground text-base">Invite New Members</h3>
+              <p class="text-xs text-muted-foreground mt-0.5">Generate an invitation link or code to share with family members or kitchen staff.</p>
             </div>
           </div>
 
           @if (!generatedInvite()) {
-            <div class="invite-form">
-              <div class="form-group">
-                <label>Member Role</label>
-                <select 
-                  [value]="inviteRole()" 
-                  (change)="inviteRole.set($any($event.target).value)" 
-                  class="form-control">
-                  <option value="member">Household Member (View & modify meals)</option>
-                  <option value="owner">Household Owner (Full management & invites)</option>
-                  <option value="viewer">Viewer (Read-only meal calendar)</option>
-                </select>
+            <div class="space-y-3.5 pt-4">
+              <div class="space-y-1">
+                <label class="text-xs font-semibold text-muted-foreground">Member Role</label>
+                <hlm-select [value]="inviteRole()" (valueChange)="onInviteRoleChange($event)">
+                  <hlm-select-trigger class="w-full h-8 bg-input border-border text-xs">
+                    <hlm-select-value placeholder="Select role..." />
+                  </hlm-select-trigger>
+                  <hlm-select-content class="bg-popover border-border">
+                    <hlm-select-item value="member">Household Member (View &amp; modify meals)</hlm-select-item>
+                    <hlm-select-item value="owner">Household Owner (Full management)</hlm-select-item>
+                    <hlm-select-item value="viewer">Viewer (Read-only)</hlm-select-item>
+                  </hlm-select-content>
+                </hlm-select>
               </div>
 
-              <div class="form-group">
-                <label>Optional Email / Note</label>
+              <div class="space-y-1">
+                <label class="text-xs font-semibold text-muted-foreground">Optional Email / Note</label>
                 <input 
+                  hlmInput 
                   type="text" 
                   [value]="inviteEmail()" 
                   (input)="inviteEmail.set($any($event.target).value)" 
                   placeholder="e.g. family member email" 
-                  class="form-control" />
+                  class="w-full h-8 text-xs" />
               </div>
 
               <button 
+                hlmBtn 
                 (click)="generateInvite()" 
                 [disabled]="isCreatingInvite()" 
-                class="btn btn-primary btn-block">
+                class="w-full text-xs">
                 @if (isCreatingInvite()) {
                   <span>Generating Link...</span>
                 } @else {
@@ -303,8 +316,8 @@
               </button>
             </div>
           } @else {
-            <div class="generated-link-box">
-              <div class="link-success-banner">
+            <div class="space-y-3 pt-4">
+              <div class="p-2.5 rounded-lg border border-emerald-500/30 bg-emerald-950/20 text-emerald-400 font-semibold text-xs flex items-center gap-2">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
@@ -312,33 +325,39 @@
                 <span>Invite link ready to share!</span>
               </div>
 
-              <div class="code-display">
-                <span class="code-label">Invite Code:</span>
-                <span class="code-value">{{ generatedInvite()?.invite_code }}</span>
+              <div class="flex items-center gap-2 bg-input/50 p-2 rounded-lg border border-border font-mono text-xs">
+                <span class="text-muted-foreground uppercase text-[10px]">Invite Code:</span>
+                <span class="font-bold text-primary tracking-wider">{{ generatedInvite()?.invite_code }}</span>
               </div>
 
-              <div class="link-input-group">
+              <div class="flex items-center gap-1.5">
                 <input 
+                  hlmInput 
                   type="text" 
                   readonly 
                   [value]="getInviteUrl(generatedInvite()!.invite_code)" 
-                  class="form-control form-control-sm readonly-url" />
+                  class="w-full text-xs font-mono h-8 select-all" />
                 <button 
+                  hlmBtn 
+                  size="sm" 
                   (click)="copyInviteLink(generatedInvite()!.invite_code)" 
-                  class="btn btn-primary btn-sm btn-copy">
-                  {{ copiedInviteLink() ? '✓ Copied!' : '📋 Copy Link' }}
+                  class="whitespace-nowrap text-xs">
+                  {{ copiedInviteLink() ? '✓ Copied!' : 'Copy Link' }}
                 </button>
               </div>
 
-              <div class="share-actions mt-3">
+              <div class="flex items-center justify-between pt-2">
                 <a 
                   [href]="'https://wa.me/?text=' + 'Join%20our%20household%20on%20Tffin:%20' + getInviteUrl(generatedInvite()!.invite_code)" 
                   target="_blank" 
-                  class="btn btn-whatsapp btn-sm">
+                  hlmBtn
+                  variant="outline"
+                  size="xs"
+                  class="text-emerald-500 border-emerald-500/30 hover:bg-emerald-950/20">
                   <span>Share on WhatsApp</span>
                 </a>
-                <button (click)="generatedInvite.set(null)" class="btn btn-ghost btn-sm">
-                  + Create Another Link
+                <button hlmBtn variant="ghost" size="xs" (click)="generatedInvite.set(null)">
+                  + Another
                 </button>
               </div>
             </div>
@@ -346,41 +365,45 @@
         </div>
 
         <!-- Pending Invitations List -->
-        <div class="card pending-invites-card">
-          <div class="card-header-row">
-            <h3 class="card-title">Pending Invitations</h3>
-            <span class="count-pill">{{ pendingInvitations().length }}</span>
+        <div hlmCard class="pending-invites-card p-6 border border-border bg-card">
+          <div class="flex items-center justify-between pb-4 border-b border-border">
+            <h3 class="font-bold text-foreground text-base">Pending Invitations</h3>
+            <span hlmBadge variant="secondary" class="text-xs">{{ pendingInvitations().length }}</span>
           </div>
 
           @if (pendingInvitations().length === 0) {
-            <div class="empty-state-mini">
+            <div class="text-center py-6 text-xs text-muted-foreground">
               <p>No pending invitations. Generate an invite link above to add members.</p>
             </div>
           } @else {
-            <div class="invites-list">
+            <div class="divide-y divide-border/60">
               @for (inv of pendingInvitations(); track inv.id) {
-                <div class="invite-item">
-                  <div class="invite-info">
-                    <div class="invite-code-row">
-                      <span class="invite-badge">{{ inv.invite_code }}</span>
-                      <span class="invite-role-tag">{{ inv.role_in_household }}</span>
+                <div class="flex items-center justify-between py-2.5">
+                  <div class="space-y-0.5">
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-mono text-xs font-bold text-primary">{{ inv.invite_code }}</span>
+                      <span hlmBadge variant="outline" class="text-[10px] capitalize">{{ inv.role_in_household }}</span>
                     </div>
                     @if (inv.email) {
-                      <span class="invite-email">{{ inv.email }}</span>
+                      <span class="text-xs text-muted-foreground block">{{ inv.email }}</span>
                     }
                   </div>
 
-                  <div class="invite-actions">
+                  <div class="flex items-center gap-1">
                     <button 
+                      hlmBtn 
+                      variant="ghost" 
+                      size="icon" 
                       (click)="copyInviteLink(inv.invite_code)" 
-                      class="btn btn-secondary btn-icon-sm" 
                       title="Copy invitation link">
                       📋
                     </button>
                     @if (canManage()) {
                       <button 
+                        hlmBtn 
+                        variant="destructive" 
+                        size="xs" 
                         (click)="revokeInvite(inv.id)" 
-                        class="btn-revoke" 
                         title="Revoke this invite">
                         Revoke
                       </button>
@@ -390,395 +413,6 @@
               }
             </div>
           }
-        </div>
-      </div>
-    </div>
-  }
-
-  <!-- Modal: Manual Join with Code -->
-  @if (isJoinModalOpen()) {
-    <div class="modal-backdrop" (click)="closeJoinModal()">
-      <div class="modal-dialog modal-sm" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <div class="modal-title-area">
-            <h3>Join a Household</h3>
-            <p class="modal-subtext">Enter the invitation code received from a household owner or manager.</p>
-          </div>
-          <button (click)="closeJoinModal()" class="btn btn-ghost btn-sm">&times;</button>
-        </div>
-
-        <div class="modal-body">
-          @if (joinError(); as err) {
-            <div class="join-error-banner">
-              <span>{{ err }}</span>
-            </div>
-          }
-
-          <div class="form-group">
-            <label>Invite Code *</label>
-            <input 
-              type="text" 
-              [value]="joinCodeInput()" 
-              (input)="joinCodeInput.set($any($event.target).value)" 
-              placeholder="e.g. TFFN-XXXXXX" 
-              class="form-control code-input-large" />
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button (click)="closeJoinModal()" class="btn btn-secondary">Cancel</button>
-          <button 
-            (click)="submitJoinCode()" 
-            [disabled]="!joinCodeInput().trim() || isJoining()" 
-            class="btn btn-primary">
-            {{ isJoining() ? 'Joining...' : 'Accept & Join Household' }}
-          </button>
-        </div>
-      </div>
-    </div>
-  }
-
-  <!-- Modal: Invite Member -->
-  @if (isInviteModalOpen()) {
-    <div class="modal-backdrop" (click)="closeInviteModal()">
-      <div class="modal-dialog modal-md" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <div class="modal-title-area">
-            <h3>Invite to {{ currentHousehold()?.name }}</h3>
-            <p class="modal-subtext">Generate an invitation link to share with a member.</p>
-          </div>
-          <button (click)="closeInviteModal()" class="btn btn-ghost btn-sm">&times;</button>
-        </div>
-
-        <div class="modal-body">
-          @if (!generatedInvite()) {
-            <div class="form-group">
-              <label>Role in Household</label>
-              <select 
-                [value]="inviteRole()" 
-                (change)="inviteRole.set($any($event.target).value)" 
-                class="form-control">
-                <option value="member">Household Member (View & plan meals)</option>
-                <option value="owner">Household Owner (Full admin access)</option>
-                <option value="viewer">Viewer (Read-only)</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Optional Email or Note</label>
-              <input 
-                type="text" 
-                [value]="inviteEmail()" 
-                (input)="inviteEmail.set($any($event.target).value)" 
-                placeholder="e.g. spouse@example.com" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Link Expiration</label>
-              <select 
-                [value]="inviteExpiryDays()" 
-                (change)="inviteExpiryDays.set(+$any($event.target).value)" 
-                class="form-control">
-                <option [value]="3">3 Days</option>
-                <option [value]="7">7 Days (Standard)</option>
-                <option [value]="14">14 Days</option>
-                <option [value]="30">30 Days</option>
-              </select>
-            </div>
-          } @else {
-            <div class="generated-link-box">
-              <div class="link-success-banner">
-                <span>✓ Invite link generated successfully!</span>
-              </div>
-              <div class="code-display">
-                <span class="code-label">Code:</span>
-                <span class="code-value">{{ generatedInvite()?.invite_code }}</span>
-              </div>
-              <div class="link-input-group mt-2">
-                <input 
-                  type="text" 
-                  readonly 
-                  [value]="getInviteUrl(generatedInvite()!.invite_code)" 
-                  class="form-control form-control-sm readonly-url" />
-                <button 
-                  (click)="copyInviteLink(generatedInvite()!.invite_code)" 
-                  class="btn btn-primary btn-sm btn-copy">
-                  {{ copiedInviteLink() ? '✓ Copied!' : 'Copy Link' }}
-                </button>
-              </div>
-            </div>
-          }
-        </div>
-
-        <div class="modal-footer">
-          @if (!generatedInvite()) {
-            <button (click)="closeInviteModal()" class="btn btn-secondary">Cancel</button>
-            <button (click)="generateInvite()" [disabled]="isCreatingInvite()" class="btn btn-primary">
-              {{ isCreatingInvite() ? 'Generating...' : 'Create Invite Link' }}
-            </button>
-          } @else {
-            <button (click)="closeInviteModal()" class="btn btn-primary">Done</button>
-          }
-        </div>
-      </div>
-    </div>
-  }
-
-  <!-- Modal: Edit Household Profile -->
-  @if (isEditModalOpen()) {
-    <div class="modal-backdrop" (click)="closeEditModal()">
-      <div class="modal-dialog modal-md" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <div class="modal-title-area">
-            <h3>Edit Household Profile</h3>
-            <p class="modal-subtext">Update name, contact info, default portions, and dietary notes.</p>
-          </div>
-          <button (click)="closeEditModal()" class="btn btn-ghost btn-sm">&times;</button>
-        </div>
-
-        <div class="modal-body">
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Household Name *</label>
-              <input 
-                type="text" 
-                [value]="editName()" 
-                (input)="editName.set($any($event.target).value)" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Short Code</label>
-              <input 
-                type="text" 
-                [value]="editCode()" 
-                (input)="editCode.set($any($event.target).value)" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Default Headcount</label>
-              <input 
-                type="number" 
-                min="1" 
-                [value]="editHeadcount()" 
-                (input)="editHeadcount.set(+$any($event.target).value)" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Contact Person</label>
-              <input 
-                type="text" 
-                [value]="editContactName()" 
-                (input)="editContactName.set($any($event.target).value)" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Contact Phone</label>
-              <input 
-                type="text" 
-                [value]="editContactPhone()" 
-                (input)="editContactPhone.set($any($event.target).value)" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Theme Color Tag</label>
-              <input 
-                type="color" 
-                [value]="editColorTag()" 
-                (input)="editColorTag.set($any($event.target).value)" 
-                class="form-control color-picker-input" />
-            </div>
-
-            <div class="form-group full-width">
-              <label>Delivery Address</label>
-              <input 
-                type="text" 
-                [value]="editAddress()" 
-                (input)="editAddress.set($any($event.target).value)" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group full-width">
-              <label>Dietary Restrictions & Guidelines</label>
-              <textarea 
-                [value]="editDietaryNotes()" 
-                (input)="editDietaryNotes.set($any($event.target).value)" 
-                rows="3" 
-                class="form-control"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer modal-footer-split">
-          <button (click)="openDeleteModal()" class="btn btn-danger btn-sm" type="button">
-            Delete Household
-          </button>
-          <div class="footer-btn-group">
-            <button (click)="closeEditModal()" class="btn btn-secondary">Cancel</button>
-            <button 
-              (click)="saveHouseholdEdit()" 
-              [disabled]="!editName().trim()" 
-              class="btn btn-primary">
-              Save Changes
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  }
-
-  <!-- Modal: Confirm Delete Household -->
-  @if (isDeleteModalOpen() && currentHousehold(); as hh) {
-    <div class="modal-backdrop" (click)="closeDeleteModal()">
-      <div class="modal-dialog modal-sm" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <div class="modal-title-area">
-            <h3 class="text-danger">Delete Household</h3>
-            <p class="modal-subtext">This action cannot be undone.</p>
-          </div>
-          <button (click)="closeDeleteModal()" class="btn btn-ghost btn-sm">&times;</button>
-        </div>
-
-        <div class="modal-body">
-          <div class="delete-warning-banner">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-              <line x1="12" y1="9" x2="12" y2="13"></line>
-              <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
-            <div>
-              <strong>Warning: Permanent Deletion</strong>
-              <p>Deleting <strong>{{ hh.name }}</strong> will permanently remove all associated meal plans, member memberships, and pending invitations.</p>
-            </div>
-          </div>
-          <p class="delete-confirm-text">
-            Are you sure you want to permanently delete <strong>{{ hh.name }}</strong>?
-          </p>
-        </div>
-
-        <div class="modal-footer">
-          <button (click)="closeDeleteModal()" class="btn btn-secondary" [disabled]="isDeleting()">Cancel</button>
-          <button 
-            (click)="confirmDeleteHousehold()" 
-            [disabled]="isDeleting()" 
-            class="btn btn-danger">
-            {{ isDeleting() ? 'Deleting...' : 'Yes, Delete Household' }}
-          </button>
-        </div>
-      </div>
-    </div>
-  }
-
-  <!-- Modal: Create New Household -->
-  @if (isCreateModalOpen()) {
-    <div class="modal-backdrop" (click)="closeCreateModal()">
-      <div class="modal-dialog modal-md" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <div class="modal-title-area">
-            <h3>Create New Household Profile</h3>
-            <p class="modal-subtext">Set up your residence or family kitchen profile to start meal planning.</p>
-          </div>
-          <button (click)="closeCreateModal()" class="btn btn-ghost btn-sm">&times;</button>
-        </div>
-
-        <div class="modal-body">
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Household Name *</label>
-              <input 
-                type="text" 
-                [value]="createName()" 
-                (input)="createName.set($any($event.target).value)" 
-                placeholder="e.g. Sharma Residence or Flat 402" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Short Code</label>
-              <input 
-                type="text" 
-                [value]="createCode()" 
-                (input)="createCode.set($any($event.target).value)" 
-                placeholder="e.g. HH-04" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Default Headcount (Persons) *</label>
-              <input 
-                type="number" 
-                min="1" 
-                [value]="createHeadcount()" 
-                (input)="createHeadcount.set(+$any($event.target).value)" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Contact Person</label>
-              <input 
-                type="text" 
-                [value]="createContactName()" 
-                (input)="createContactName.set($any($event.target).value)" 
-                placeholder="e.g. Primary resident" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Contact Phone</label>
-              <input 
-                type="text" 
-                [value]="createContactPhone()" 
-                (input)="createContactPhone.set($any($event.target).value)" 
-                placeholder="e.g. +91 98765 43210" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group">
-              <label>Theme Color Tag</label>
-              <div class="color-picker-row">
-                <input 
-                  type="color" 
-                  [value]="createColorTag()" 
-                  (input)="createColorTag.set($any($event.target).value)" 
-                  class="color-picker-input" />
-              </div>
-            </div>
-
-            <div class="form-group full-width">
-              <label>Delivery Address</label>
-              <input 
-                type="text" 
-                [value]="createAddress()" 
-                (input)="createAddress.set($any($event.target).value)" 
-                placeholder="e.g. B-104 Sunrise Heights, Road No. 2" 
-                class="form-control" />
-            </div>
-
-            <div class="form-group full-width">
-              <label>Dietary Restrictions & Guidelines</label>
-              <textarea 
-                [value]="createDietaryNotes()" 
-                (input)="createDietaryNotes.set($any($event.target).value)" 
-                placeholder="e.g. Vegetarian, Jain (no root veggies), Low spice, Nut allergy" 
-                rows="3" 
-                class="form-control"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button (click)="closeCreateModal()" class="btn btn-secondary" [disabled]="isCreatingHousehold()">Cancel</button>
-          <button 
-            (click)="submitCreateHousehold()" 
-            [disabled]="!createName().trim() || isCreatingHousehold()" 
-            class="btn btn-primary">
-            {{ isCreatingHousehold() ? 'Creating Household...' : 'Create Household' }}
-          </button>
         </div>
       </div>
     </div>

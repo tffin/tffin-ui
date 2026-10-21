@@ -1,30 +1,37 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmBadge } from '@spartan-ng/helm/badge';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmTableImports } from '@spartan-ng/helm/table';
+import { HlmProgressImports } from '@spartan-ng/helm/progress';
+import { HlmDialogService } from '@spartan-ng/helm/dialog';
 import { MealStoreService } from '../../core/services/meal-store.service';
-import { IngredientCategory, MeasurementUnit } from '../../core/models/ingredient.model';
+import { IngredientCreateDialogComponent } from './components/ingredient-create-dialog.component';
 
 @Component({
   selector: 'app-inventory',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    HlmButton,
+    HlmBadge,
+    HlmInput,
+    HlmTableImports,
+    HlmProgressImports
+  ],
   templateUrl: './inventory.html',
   styleUrl: './inventory.scss'
 })
 export class InventoryComponent {
   public store = inject(MealStoreService);
+  protected readonly dialogService = inject(HlmDialogService);
 
   public selectedCategory = signal<string>('all');
   public searchQuery = signal<string>('');
   public filterLowStockOnly = signal<boolean>(false);
-
-  // New Ingredient Modal
-  public isModalOpen = signal<boolean>(false);
-  public newName = signal<string>('');
-  public newCategory = signal<IngredientCategory>('produce');
-  public newUnit = signal<MeasurementUnit>('g');
-  public newInitialStock = signal<number>(500);
-  public newMinThreshold = signal<number>(250);
 
   public enrichedInventory = this.store.enrichedInventory;
 
@@ -52,30 +59,9 @@ export class InventoryComponent {
   });
 
   public openCreateModal(): void {
-    this.newName.set('');
-    this.newCategory.set('produce');
-    this.newUnit.set('g');
-    this.newInitialStock.set(500);
-    this.newMinThreshold.set(250);
-    this.isModalOpen.set(true);
-  }
-
-  public closeModal(): void {
-    this.isModalOpen.set(false);
-  }
-
-  public async saveNewIngredient(): Promise<void> {
-    const name = this.newName().trim();
-    if (!name) return;
-
-    await this.store.createIngredient(
-      name,
-      this.newCategory(),
-      this.newUnit(),
-      this.newInitialStock(),
-      this.newMinThreshold()
-    );
-    this.closeModal();
+    this.dialogService.open(IngredientCreateDialogComponent, {
+      contentClass: 'sm:max-w-[500px] bg-card text-card-foreground border-border'
+    });
   }
 
   public async adjustStock(ingredientId: string, delta: number): Promise<void> {
