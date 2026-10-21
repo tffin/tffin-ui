@@ -78,7 +78,7 @@
     <div class="meals-section">
       <div class="section-header">
         <h2 class="section-title">Today's Meal Board</h2>
-        <span hlmBadge class="badge-amber font-semibold">
+        <span hlmBadge variant="amber" class="font-semibold">
           {{ currentHouseholdFilter() ? 'Single Household View' : 'Multi-Household Overview' }}
         </span>
       </div>
@@ -90,7 +90,7 @@
             <div hlmCard class="meal-card" [class.empty-slot]="!item.dish">
               <div class="meal-card-top">
                 <div class="meal-meta">
-                  <span hlmBadge [ngClass]="getMealBadgeClass(item.mealType)">{{ item.mealType }}</span>
+                  <span hlmBadge [variant]="getMealBadgeVariant(item.mealType)">{{ item.mealType }}</span>
                   @if (item.schedule) {
                     <div class="headcount-control">
                       <button hlmBtn variant="outline" size="icon-xs" (click)="decrementHeadcount(item.mealType, item.schedule.household_id)">-</button>
@@ -156,7 +156,7 @@
             <div hlmCard class="meal-card multi-hh-card">
               <div class="meal-card-top">
                 <div class="meal-meta">
-                  <span hlmBadge [ngClass]="getMealBadgeClass(item.mealType)">{{ item.mealType }}</span>
+                  <span hlmBadge [variant]="getMealBadgeVariant(item.mealType)">{{ item.mealType }}</span>
                   <span class="total-portions-tag">{{ item.totalHeadcount }} Portions Total</span>
                 </div>
 
@@ -230,7 +230,7 @@
         <div class="card-header">
           <div class="title-with-count">
             <h3 class="widget-title">Chef Prep Batch Totals</h3>
-            <span hlmBadge class="badge-emerald font-semibold">{{ batchPrepSummary().length }} Dishes</span>
+            <span hlmBadge variant="emerald" class="font-semibold">{{ batchPrepSummary().length }} Dishes</span>
           </div>
         </div>
 
@@ -259,7 +259,7 @@
         <div class="card-header">
           <div class="title-with-count">
             <h3 class="widget-title">Pantry Threshold Watch</h3>
-            <span hlmBadge class="badge-rose font-semibold">{{ lowStockItems().length }} Low</span>
+            <span hlmBadge variant="rose" class="font-semibold">{{ lowStockItems().length }} Low</span>
           </div>
           <a routerLink="/inventory" class="text-link text-xs font-semibold text-primary hover:underline">View All</a>
         </div>

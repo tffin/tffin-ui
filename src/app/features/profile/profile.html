@@ -85,8 +85,8 @@
               </span>
 
               @if (isGoogleUser()) {
-                <span hlmBadge variant="secondary" class="gap-1 text-xs text-sky-400" title="Authenticated with Google">
-                  <ng-icon name="lucideShieldCheck" size="12" />
+                <span hlmBadge variant="secondary" class="gap-1.5 text-xs text-sky-400" title="Authenticated with Google">
+                  <ng-icon name="lucideShieldCheck" size="13" />
                   Google Account
                 </span>
               }
@@ -288,13 +288,13 @@
             (input)="dietaryPreferences.set($any($event.target).value)" 
             placeholder="e.g. Vegetarian, Jain (no garlic/onion), Gluten-free, Low oil" />
           
-          <div class="flex flex-wrap items-center gap-1.5 mt-2">
-            <span class="text-xs text-muted-foreground font-semibold">Quick Suggestions:</span>
-            <button hlmBtn variant="outline" size="xs" type="button" (click)="dietaryPreferences.set('Strictly Vegetarian')">Vegetarian</button>
-            <button hlmBtn variant="outline" size="xs" type="button" (click)="dietaryPreferences.set('Jain (no onion/garlic)')">Jain</button>
-            <button hlmBtn variant="outline" size="xs" type="button" (click)="dietaryPreferences.set('Gluten-free, Low Spice')">Gluten-free</button>
-            <button hlmBtn variant="outline" size="xs" type="button" (click)="dietaryPreferences.set('High Protein, Eggitarian')">High Protein</button>
-            <button hlmBtn variant="outline" size="xs" type="button" (click)="dietaryPreferences.set('No Restrictions / Standard')">Standard</button>
+          <div class="flex flex-wrap items-center gap-2 mt-2">
+            <span class="text-xs text-muted-foreground font-semibold me-1">Quick Suggestions:</span>
+            <button hlmBtn variant="outline" size="xs" type="button" class="px-2.5 py-1 text-xs" (click)="dietaryPreferences.set('Strictly Vegetarian')">Vegetarian</button>
+            <button hlmBtn variant="outline" size="xs" type="button" class="px-2.5 py-1 text-xs" (click)="dietaryPreferences.set('Jain (no onion/garlic)')">Jain</button>
+            <button hlmBtn variant="outline" size="xs" type="button" class="px-2.5 py-1 text-xs" (click)="dietaryPreferences.set('Gluten-free, Low Spice')">Gluten-free</button>
+            <button hlmBtn variant="outline" size="xs" type="button" class="px-2.5 py-1 text-xs" (click)="dietaryPreferences.set('High Protein, Eggitarian')">High Protein</button>
+            <button hlmBtn variant="outline" size="xs" type="button" class="px-2.5 py-1 text-xs" (click)="dietaryPreferences.set('No Restrictions / Standard')">Standard</button>
           </div>
         </div>
 

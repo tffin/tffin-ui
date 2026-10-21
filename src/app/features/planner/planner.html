@@ -47,13 +47,15 @@
       <div hlmCard class="day-column" [class.is-today]="day.isToday">
         <!-- Day Header -->
         <div class="day-header">
-          <div class="day-info">
-            <span class="day-name">{{ day.dayName }}</span>
-            <span class="day-number">{{ day.dayNumber }}</span>
+          <div class="flex items-center justify-between gap-1.5">
+            <div class="day-info">
+              <span class="day-name">{{ day.dayName }}</span>
+              <span class="day-number">{{ day.dayNumber }}</span>
+            </div>
+            @if (day.isToday) {
+              <span hlmBadge class="today-pill">Today</span>
+            }
           </div>
-          @if (day.isToday) {
-            <span hlmBadge class="today-pill">Today</span>
-          }
           <span hlmBadge variant="outline" class="day-headcount-badge" title="Total Portions Expected Across Households">
             {{ day.totalDayHeadcount }} pers.
           </span>

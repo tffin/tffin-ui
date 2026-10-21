@@ -85,10 +85,10 @@
             <!-- Category -->
             <td hlmTd class="px-4 py-3">
               <span hlmBadge 
-                [class.badge-emerald]="item.ingredient?.category === 'produce'"
-                [class.badge-amber]="item.ingredient?.category === 'dairy'"
-                [class.badge-purple]="item.ingredient?.category === 'spices'"
-                [class.badge-sky]="item.ingredient?.category === 'staples'"
+                [variant]="item.ingredient?.category === 'produce' ? 'emerald' : 
+                          item.ingredient?.category === 'dairy' ? 'amber' : 
+                          item.ingredient?.category === 'spices' ? 'purple' : 
+                          item.ingredient?.category === 'staples' ? 'sky' : 'outline'"
                 class="font-medium capitalize text-xs">
                 {{ item.ingredient?.category }}
               </span>

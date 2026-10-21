@@ -100,22 +100,21 @@
 }
 
 .today-pill {
-  position: absolute;
-  top: 0.6rem;
-  right: 0.6rem;
-  background: var(--primary);
-  color: #0b0f19;
+  background: var(--primary) !important;
+  color: #0b0f19 !important;
   font-size: 0.65rem;
   font-weight: 800;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 0.1rem 0.4rem;
-  border-radius: var(--radius-sm);
+  padding: 0.15rem 0.55rem;
+  line-height: 1.2;
 }
 
 .day-headcount-badge {
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--text-secondary);
+  width: fit-content;
 }
 
 .day-slots {
@@ -217,9 +216,10 @@
 .stock-mini-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.68rem;
+  gap: 0.4rem;
+  font-size: 0.7rem;
   font-weight: 600;
+  line-height: 1.2;
 
   .dot-ok {
     width: 6px;
@@ -278,11 +278,15 @@
 }
 
 .slot-total-badge {
-  font-size: 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.68rem;
   font-weight: 700;
+  line-height: 1.2;
   color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.1rem 0.35rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  padding: 0.15rem 0.45rem;
   border-radius: 4px;
 }
 
@@ -323,12 +327,16 @@
     gap: 0.4rem;
 
     .hh-code-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       font-size: 0.65rem;
       font-weight: 800;
       color: white;
-      padding: 0.1rem 0.35rem;
-      border-radius: 3px;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
       line-height: 1.2;
+      flex-shrink: 0;
     }
 
     .hh-dish-name {

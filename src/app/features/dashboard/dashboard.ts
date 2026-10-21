@@ -133,6 +133,14 @@ export class DashboardComponent {
     });
   });
 
+  public getMealBadgeVariant(type: MealType): 'amber' | 'emerald' | 'purple' {
+    switch (type) {
+      case 'breakfast': return 'amber';
+      case 'lunch': return 'emerald';
+      case 'dinner': return 'purple';
+    }
+  }
+
   public getMealBadgeClass(type: MealType): string {
     switch (type) {
       case 'breakfast': return 'badge-amber';
