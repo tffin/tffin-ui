@@ -6,7 +6,6 @@ import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmDialogService } from '@spartan-ng/helm/dialog';
 import { MealStoreService } from '../../core/services/meal-store.service';
-import { Dish } from '../../core/models/dish.model';
 import { DishCreateDialogComponent } from './components/dish-create-dialog.component';
 
 @Component({
@@ -30,7 +29,6 @@ export class DishesComponent {
   public portionMultiplier = signal<number>(3); // 1, 3, 5 people portion preview
 
   public dishes = this.store.dishes;
-  public masterIngredients = this.store.ingredients;
   public ingredientsMap = this.store.ingredientsMap;
 
   public filteredDishes = computed(() => {

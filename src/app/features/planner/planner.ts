@@ -5,10 +5,8 @@ import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { HlmDialogService } from '@spartan-ng/helm/dialog';
-import { MealStoreService, getTodayString, DayMealSlot, SlotHouseholdPlan } from '../../core/services/meal-store.service';
-import { Dish } from '../../core/models/dish.model';
-import { MealSchedule, MealType } from '../../core/models/meal-schedule.model';
-import { Household } from '../../core/models/household.model';
+import { MealStoreService, getTodayString, DayMealSlot } from '../../core/services/meal-store.service';
+import { MealType } from '../../core/models/meal-schedule.model';
 import { MealAssignDialogComponent } from '../dashboard/components/meal-assign-dialog.component';
 
 export interface DayColumn {
@@ -79,11 +77,6 @@ export class PlannerComponent {
 
   public resetToToday(): void {
     this.weekOffset.set(0);
-  }
-
-  public setPlannerHousehold(event: Event): void {
-    const val = (event.target as HTMLSelectElement).value;
-    this.store.setSelectedHousehold(val ? val : null);
   }
 
   public setPlannerHouseholdValue(householdId: string | null | undefined): void {

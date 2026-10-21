@@ -7,10 +7,8 @@ import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmProgressImports } from '@spartan-ng/helm/progress';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { HlmDialogService } from '@spartan-ng/helm/dialog';
-import { MealStoreService, getTodayString, DayMealSlot, SlotHouseholdPlan } from '../../core/services/meal-store.service';
-import { Dish } from '../../core/models/dish.model';
+import { MealStoreService, getTodayString } from '../../core/services/meal-store.service';
 import { MealType } from '../../core/models/meal-schedule.model';
-import { Household } from '../../core/models/household.model';
 import { MealAssignDialogComponent } from './components/meal-assign-dialog.component';
 
 export interface BatchPrepDish {
@@ -113,11 +111,6 @@ export class DashboardComponent {
       case 'lunch': return 'badge-emerald';
       case 'dinner': return 'badge-purple';
     }
-  }
-
-  public setFilter(event: Event): void {
-    const val = (event.target as HTMLSelectElement).value;
-    this.store.setSelectedHousehold(val ? val : null);
   }
 
   public setFilterValue(val: string | null | undefined): void {

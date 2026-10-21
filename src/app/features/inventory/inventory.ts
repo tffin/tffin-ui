@@ -1,6 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmInput } from '@spartan-ng/helm/input';
@@ -15,7 +14,6 @@ import { IngredientCreateDialogComponent } from './components/ingredient-create-
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     HlmButton,
     HlmBadge,
     HlmInput,

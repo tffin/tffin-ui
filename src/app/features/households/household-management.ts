@@ -1,6 +1,5 @@
 import { Component, computed, effect, inject, OnInit, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmBadge } from '@spartan-ng/helm/badge';
@@ -24,7 +23,6 @@ import { HouseholdDeleteDialogComponent } from './components/household-delete-di
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     RouterLink,
     HlmButton,
     HlmBadge,
